@@ -16,4 +16,6 @@ jobs:
           cachix_token: ${{ secrets.CACHIX_TOKEN }}
       - uses: DeterminateSystems/update-flake-lock@v19
         with:
+          # Custom token with `repo` access
+          token: ${{ secrets.GH_TOKEN }}
           pr-title: Update flake.lock
