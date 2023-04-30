@@ -1,0 +1,21 @@
+name: nix flake check
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check_nix:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: ./.github/actions/setup-nix
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          cachix_token: ${{ secrets.CACHIX_TOKEN }}
+      - run: nix flake check

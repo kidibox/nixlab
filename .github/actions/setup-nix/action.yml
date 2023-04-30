@@ -1,0 +1,25 @@
+name: Setup Nix
+
+description: Install & configure nix & cachix
+
+inputs:
+  github_token:
+    description: A GitHub PAT
+    required: true
+  cachix_token:
+    description: Cachix Auth Token
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - uses: cachix/install-nix-action@v20
+      with:
+        # To avoid GitHub rate limiting
+        extra_nix_config:
+          access-tokens = github.com=${{ inputs.github_token }}
+    - uses: cachix/cachix-action@v12
+      with:
+        name: kidibox
+        extrapullNames: nix-community,devenv,numtide
+        authToken: ${{ inputs.cachix_token }}
