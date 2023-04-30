@@ -1,0 +1,7 @@
+.direnv/
+.terraform/
+result
+*.qcow2
+*.tfvars
+*.tfstate
+*.tfstate.backup
