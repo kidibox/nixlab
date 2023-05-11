@@ -3,4 +3,8 @@
     'config:base',
   ],
   timezone: 'Europe/Brussels',
+  platform: 'github',
+  repositories: [
+    'kidibox/nixlab',
+  ],
 }
