@@ -1,6 +1,6 @@
 {
-    platform: 'github',
-    repositories: [
-        'kidibox/nixlab',
-    ],
+  extends: [
+    'config:base',
+  ],
+  timezone: 'Europe/Brussels',
 }
