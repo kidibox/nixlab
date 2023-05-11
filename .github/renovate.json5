@@ -7,4 +7,7 @@
   repositories: [
     'kidibox/nixlab',
   ],
+  lockFileMaintenance: { 
+    enabled: true 
+  }
 }
