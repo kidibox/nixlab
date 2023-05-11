@@ -1,1 +1,6 @@
-{}
+{
+  platform: 'github',
+  repositories: [
+    'kidibox/nixlab',
+  ],
+}
