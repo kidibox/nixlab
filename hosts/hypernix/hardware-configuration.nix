@@ -31,13 +31,17 @@
   };
 
   disko.devices = import ./disk-config.nix { inherit lib; };
+  virtualisation.vmVariant = {
+    virtualisation.graphics = false;
+    virtualisation.useDefaultFilesystems = false;
+  };
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
   # hardware.enableRedistributableFirmware = true;
 
   powerManagement = {
     enable = true;
-    # powertop.enable = true;
+    powertop.enable = true;
     cpuFreqGovernor = "powersave";
     scsiLinkPolicy = "med_power_with_dipm";
   };

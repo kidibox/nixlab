@@ -1,4 +1,9 @@
 {
+  # nixConfig = {
+  #
+  #   extra-experimental-features = "nix-command flakes ca-derivations";
+  # };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -34,6 +39,10 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    deploy-rs = {
+      url = "github:serokell/deploy-rs";
+    };
   };
 
   outputs = inputs@{ self, flake-parts, ... }:
@@ -67,12 +76,21 @@
         #   };
         # };
 
+        # _module.args.pkgs = import inputs.nixpkgs {
+        #   inherit system;
+        #   overlays = [
+        #     inputs.deploy-rs.overlay
+        #   ];
+        #   config = { };
+        # };
+
         devshells.default = {
           packages = with pkgs; [
             treefmt
             terragrunt
             terraform
             terraform-ls
+            # deploy-rs
           ];
         };
 
@@ -85,6 +103,20 @@
             terraform.enable = true;
           };
         };
+      };
+
+      flake = {
+        deploy.nodes.hypernix = {
+          hostname = "10.128.10.101";
+          profiles.system = {
+            user = "root";
+            sshUser = "kid";
+            remoteBuild = true;
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hypernix;
+          };
+        };
+
+        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
       };
 
       # flake = {
