@@ -1,7 +1,0 @@
-version: 2
-
-updates:
-  - directory: /terraform/
-    package-ecosystem: terraform
-    schedule:
-      interval: "daily"
