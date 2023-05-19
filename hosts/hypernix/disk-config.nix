@@ -67,13 +67,19 @@
         nix = {
           type = "zfs_fs";
           mountpoint = "/nix";
-          # mountOptions = [ "zfsutil" ];
         };
         persist = {
           type = "zfs_fs";
           mountpoint = "/persist";
-          # mountOptions = [ "zfsutil" ];
         };
+        # libvirt = {
+        #   type = "zfs_fs";
+        #   mountpoint = "/var/lib/libvirt";
+        # };
+        # "persist/home" = {
+        #   type = "zfs_fs";
+        #   mountpoint = "/persist/home";
+        # };
       };
     };
   };

@@ -3,9 +3,9 @@
 DISK='@disk@'
 MAIN_LABEL='@main@'
 ZFS_NIX='@nix@'
-ZFS_HOME='@home'
-ZFS_HARDSTATE='@hardstate'
-ZFS_SOFTSTATE='@softstate'
+ZFS_HOME='@home@'
+ZFS_HARDSTATE='@hardstate@'
+ZFS_SOFTSTATE='@softstate@'
 
 PARTED='@parted@'
 UDEVADM='@udevadm@'

@@ -6,7 +6,6 @@
     inputs.impermanence.nixosModule
     ../../modules/common.nix
     ./hardware-configuration.nix
-    ../../modules/nixos/profiles/server.nix
   ];
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
@@ -17,6 +16,7 @@
   '';
 
   # TODO move this to common
+  # TODO is this even required?
   # services.fwupd.enable = true;
   # hardware.cpu.intel.updateMicrocode = true;
 
@@ -34,20 +34,12 @@
           Name = "br10";
           Kind = "bridge";
         };
-        # extraConfig = ''
-        #   [Bridge]
-        #   STP = true;
-        # '';
       };
       br100 = {
         netdevConfig = {
           Name = "br100";
           Kind = "bridge";
         };
-        # extraConfig = ''
-        #   [Bridge]
-        #   STP = true;
-        # '';
       };
       srv = {
         netdevConfig = {
@@ -71,14 +63,23 @@
       };
       br100 = {
         name = "br100";
-        DHCP = "ipv4";
-        dhcpV4Config = {
-          RouteMetric = 2048;
+        linkConfig = {
+          RequiredForOnline = false;
+        };
+        networkConfig = {
+          LinkLocalAddressing = "no";
+          LLDP = "no";
+          EmitLLDP = "no";
+          IPv6AcceptRA = "no";
+          IPv6SendRA = "no";
         };
       };
       enp3s0 = {
         name = "enp3s0";
         vlan = [ "srv" "lan" ];
+        linkConfig = {
+          RequiredForOnline = false;
+        };
         # Disable all the autoconfiguration magic we don't need a link without VLAN
         networkConfig = {
           LinkLocalAddressing = "no";
@@ -99,4 +100,3 @@
     };
   };
 }
-

@@ -2,7 +2,7 @@
 {
   imports = [
     inputs.srvos.nixosModules.common
-    inputs.srvos.nixosModules.mixins-telegraf
+    # inputs.srvos.nixosModules.mixins-telegraf
     # config.flake.nixosModules.mixins-common-networking
     ../mixins/common/networking.nix
   ];
@@ -24,10 +24,12 @@
 
   environment = {
     systemPackages = with pkgs; [
+      vim
       tmux
       htop
       powertop
       pciutils # for lspci
+      tcpdump
     ];
   };
 }
