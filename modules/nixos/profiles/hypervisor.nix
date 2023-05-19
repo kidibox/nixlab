@@ -1,12 +1,5 @@
 { pkgs, ... }:
 {
-  environment.systemPackages = with pkgs; [
-    # qemu_full
-    # virt-manager
-  ];
-
-  # programs.dconf.enable = true;
-
   # required by libvirtd
   security.polkit.enable = true;
 
@@ -16,5 +9,6 @@
       runAsRoot = false;
       ovmf.enable = true;
     };
+    allowedBridges = [ "br10" "br100" ];
   };
 }

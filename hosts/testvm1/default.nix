@@ -1,4 +1,4 @@
-{ inputs, config, modulesPath, nixpkgs, ... }:
+{ inputs, pkgs, lib, config, modulesPath, nixpkgs, ... }:
 {
   imports = [
     "${modulesPath}/installer/scan/not-detected.nix"
@@ -9,7 +9,7 @@
   ];
 
   boot.loader.systemd-boot.enable = true;
-  boot.zfs.devNodes = "/dev/vda2";
+  boot.zfs.devNodes = "/dev/vda1";
   boot.supportedFilesystems = [ "zfs" ];
   boot.kernelPackages = config.boot.zfs.package.latestCompatibleLinuxPackages;
 
@@ -28,7 +28,58 @@
   #   options = [ "size=4G" "mode=755" ];
   # };
 
-  virtualisation.vmVariant.virtualisation.graphics = false;
+  virtualisation.vmVariant = {
+    boot.initrd.postDeviceCommands = lib.mkForce (
+      builtins.readFile (
+        pkgs.substituteAll {
+          src = ./prepare.sh;
+
+          disk = "/dev/vda";
+          main = "zroot";
+          nix = "nix";
+          home = "home";
+          hardstate = "persist";
+          softstate = "softstate";
+
+          parted = "${pkgs.parted}/bin/parted";
+          udevadm = "udevadm";
+          zpool = "zpool";
+          zfs = "zfs";
+        }
+      )
+    );
+
+    virtualisation = {
+      diskSize = 8192;
+      graphics = false;
+      useDefaultFilesystems = false;
+      fileSystems = {
+        "/" = {
+          device = "none";
+          fsType = "tmpfs";
+          options = [ "mode=0755" ];
+        };
+        "/home" = {
+          device = "zroot/home";
+          fsType = "zfs";
+          neededForBoot = true;
+          options = [ "zfsutil" ];
+        };
+        "/nix" = {
+          device = "zroot/nix";
+          fsType = "zfs";
+          neededForBoot = true;
+          options = [ "zfsutil" ];
+        };
+        "/persist" = {
+          device = "zroot/persist";
+          fsType = "zfs";
+          neededForBoot = true;
+          options = [ "zfsutil" ];
+        };
+      };
+    };
+  };
 
   boot.loader.grub = {
     devices = [ "/dev/vda" ];
@@ -59,21 +110,19 @@
           #   part-type = "primary";
           #   flags = [ "bios_grub" ];
           # }
-          {
-            type = "partition";
-            name = "ESP";
-            start = "1MiB";
-            end = "512MiB";
-            bootable = true;
-            content = {
-              type = "filesystem";
-              format = "vfat";
-              mountpoint = "/boot";
-            };
-          }
+          # {
+          #   name = "ESP";
+          #   start = "1MiB";
+          #   end = "512MiB";
+          #   bootable = true;
+          #   content = {
+          #     type = "filesystem";
+          #     format = "vfat";
+          #     mountpoint = "/boot";
+          #   };
+          # }
           {
             name = "nixos";
-            type = "partition";
             start = "512MiB";
             end = "100%";
             part-type = "primary";
@@ -87,16 +136,16 @@
       };
     };
 
-    nodev = {
-      "/" = {
-        fsType = "tmpfs";
-        mountOptions = [
-          "defaults"
-          "size=4G"
-          "mode=755"
-        ];
-      };
-    };
+    # nodev = {
+    #   "/" = {
+    #     fsType = "tmpfs";
+    #     mountOptions = [
+    #       "defaults"
+    #       "size=4G"
+    #       "mode=755"
+    #     ];
+    #   };
+    # };
 
     zpool = {
       zroot = {
@@ -117,24 +166,26 @@
           xattr = "sa";
         };
 
-        # mountpoint = "none";
+        mountpoint = "/";
+        postCreateHook = "zfs snapshot zroot@blank";
 
         datasets = {
           nix = {
-            zfs_type = "filesystem";
+            type = "zfs_fs";
             mountpoint = "/nix";
-            mountOptions = [ "zfsutil" ];
+            # mountOptions = [ "zfsutil" ];
           };
           persist = {
-            zfs_type = "filesystem";
+            type = "zfs_fs";
             mountpoint = "/persist";
-            mountOptions = [ "zfsutil" ];
+            # mountOptions = [ "zfsutil" ];
           };
         };
       };
     };
   };
 
+  fileSystems."/".neededForBoot = true;
   fileSystems."/nix".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
 

@@ -1,5 +1,5 @@
-# { lib, disks ? [ "/dev/disk/by-id/nvme-WD_BLACK_SN850X_1000GB_22518J459213" ], ... }: {
-{ lib, disks ? [ "/dev/vda" ], ... }: {
+{ lib, disks ? [ "/dev/disk/by-id/nvme-WD_BLACK_SN850X_1000GB_22518J459213" ], ... }: {
+  # { lib, disks ? [ "/dev/vda" ], ... }: {
   disk = lib.genAttrs disks (dev: {
     device = dev;
     type = "disk";
@@ -8,7 +8,6 @@
       format = "gpt";
       partitions = [
         {
-          type = "partition";
           name = "ESP";
           start = "1MiB";
           end = "512MiB";
@@ -21,7 +20,6 @@
         }
         {
           name = "nixos";
-          type = "partition";
           start = "512MiB";
           end = "100%";
           part-type = "primary";
@@ -67,15 +65,21 @@
 
       datasets = {
         nix = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           mountpoint = "/nix";
-          mountOptions = [ "zfsutil" ];
         };
         persist = {
-          zfs_type = "filesystem";
+          type = "zfs_fs";
           mountpoint = "/persist";
-          mountOptions = [ "zfsutil" ];
         };
+        # libvirt = {
+        #   type = "zfs_fs";
+        #   mountpoint = "/var/lib/libvirt";
+        # };
+        # "persist/home" = {
+        #   type = "zfs_fs";
+        #   mountpoint = "/persist/home";
+        # };
       };
     };
   };
