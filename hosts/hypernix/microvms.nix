@@ -1,9 +1,5 @@
 { inputs, ... }:
 {
-  imports = [
-    inputs.microvm.nixosModules.host
-  ];
-
   nixpkgs.overlays = [
     inputs.microvm.overlay
   ];
