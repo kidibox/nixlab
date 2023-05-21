@@ -1,4 +1,3 @@
-{ pkgs, ... }:
 {
   # required by libvirtd
   security.polkit.enable = true;

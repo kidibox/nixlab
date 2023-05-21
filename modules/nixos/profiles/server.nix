@@ -1,7 +1,7 @@
 { inputs, lib, pkgs, config, ... }:
 {
   imports = [
-    inputs.srvos.nixosModules.common
+    # inputs.srvos.nixosModules.common
     # inputs.srvos.nixosModules.mixins-telegraf
     # config.flake.nixosModules.mixins-common-networking
     ../mixins/common/networking.nix
@@ -32,4 +32,11 @@
       tcpdump
     ];
   };
+
+  # # This is pulled in by the container profile, but it seems broken and causes
+  # # unecessary rebuilds.
+  # environment.noXlibs = false;
+  #
+  # # Allow sudo from the @wheel group
+  # security.sudo.enable = true;
 }

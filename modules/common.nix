@@ -1,4 +1,3 @@
-{ pkgs, ... }:
 {
   system.stateVersion = "23.05";
 
@@ -19,7 +18,6 @@
     ];
   };
 
-  # services.getty.autologinUser = "kid";
   security.sudo.wheelNeedsPassword = false;
 
   # services.openssh.enable = true;

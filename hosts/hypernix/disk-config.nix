@@ -72,14 +72,14 @@
           type = "zfs_fs";
           mountpoint = "/persist";
         };
-        # libvirt = {
-        #   type = "zfs_fs";
-        #   mountpoint = "/var/lib/libvirt";
-        # };
-        # "persist/home" = {
-        #   type = "zfs_fs";
-        #   mountpoint = "/persist/home";
-        # };
+        libvirt = {
+          type = "zfs_fs";
+          mountpoint = "/libvirt";
+        };
+        "persist/home" = {
+          type = "zfs_fs";
+          mountpoint = "/persist/home";
+        };
       };
     };
   };

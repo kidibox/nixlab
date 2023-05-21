@@ -1,12 +1,5 @@
-{ config, lib, pkgs, inputs, ... }:
+{ config, lib, ... }:
 {
-  imports = [
-    inputs.disko.nixosModules.disko
-    inputs.nixos-hardware.nixosModules.common-pc
-    inputs.nixos-hardware.nixosModules.common-pc-ssd
-    inputs.nixos-hardware.nixosModules.common-cpu-intel
-  ];
-
   boot = {
     loader = {
       systemd-boot.enable = true;
@@ -23,10 +16,10 @@
     # kernelPackages = pkgs.linuxPackages_latest_hardened;
 
     kernelParams = [
-      "pcie_aspm=force"
-      "intel_pstate=passive"
-      "nvme.noacpi=1"
-      "memsleep_default=deep"
+      # "pcie_aspm=force"
+      "intel_pstate=hwp_only"
+      # "nvme.noacpi=1"
+      # "memsleep_default=deep"
     ];
   };
 
@@ -38,11 +31,23 @@
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
   # hardware.enableRedistributableFirmware = true;
+  nixpkgs.config.allowUnfree = true;
 
   powerManagement = {
     enable = true;
     powertop.enable = true;
     cpuFreqGovernor = "powersave";
     scsiLinkPolicy = "med_power_with_dipm";
+  };
+
+  hardware = {
+    enableRedistributableFirmware = true;
+    enableAllFirmware = true;
+  };
+
+  services = {
+    fwupd.enable = true;
+    smartd.enable = true;
+    thermald.enable = true;
   };
 }
