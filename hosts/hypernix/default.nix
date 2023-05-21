@@ -4,7 +4,9 @@ let
 in
 {
   flake.nixosConfigurations.${hostName} = inputs.nixpkgs.lib.nixosSystem {
+    system = "x86_64-linux";
     modules = lib.lists.flatten [
+      { _module.args.inputs = inputs; }
       ({ modulesPath, ... }: {
         imports = [
           "${modulesPath}/installer/scan/not-detected.nix"
@@ -15,6 +17,7 @@ in
       inputs.disko.nixosModules.disko
       inputs.impermanence.nixosModule
       inputs.srvos.nixosModules.common
+      inputs.microvm.nixosModules.host
       # (with config.flake.nixosModules; [
       #   # flake-inputs
       #   # Theses 2 should probably be inlcuded in the server profile
@@ -27,15 +30,12 @@ in
         ../../modules/common.nix
         ./hardware-configuration.nix
         ./networking.nix
-        (import ./microvms.nix { inherit inputs; })
+        ./microvms.nix
 
         {
-          nixpkgs.hostPlatform.system = "x86_64-linux";
-        }
-        {
-          # nixpkgs.overlays = [
-          #   inputs.deploy-rs.overlay
-          # ];
+          nixpkgs.overlays = [
+            inputs.microvm.overlay
+          ];
           # services.udev.extraRules = ''
           #   SUBSYSTEM=="pci", ATTR{power/control}="auto"
           #   ACTION=="add", SUBSYSTEM=="usb", TEST=="power/control", ATTR{power/control}="auto"
