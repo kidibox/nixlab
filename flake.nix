@@ -3,6 +3,20 @@
   #
   #   extra-experimental-features = "nix-command flakes ca-derivations";
   # };
+  nixConfig = {
+    extra-substituters = [
+      "https://nix-community.cachix.org"
+      "https://numtide.cachix.org"
+      "https://kidibox.cachix.org"
+      "https://microvm.cachix.org"
+    ];
+    extra-trusted-public-keys = [
+      "nix-community.cachix.org-1:mB9FSh9qf2dCimDSUo8Zy7bkq5CX+/rkCWyvRCYg3Fs="
+      "numtide.cachix.org-1:2ps1kLBUWjxIneOy1Ik6cQjb41X0iXVXeHigGmycPPE="
+      "kidibox.cachix.org-1:BN875x9JUW61souPxjf7eA5Uh2k3A1OSA1JIb/axGGE="
+      "microvm.cachix.org-1:oXnBc6hRE3eX5rSYdRyMYXnfzcCxC7yKPTbZXALsqys="
+    ];
+  };
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
@@ -43,106 +57,85 @@
     deploy-rs = {
       url = "github:serokell/deploy-rs";
     };
+
+    microvm = {
+      url = "github:oddlama/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs = inputs@{ self, flake-parts, ... }:
-    let
-      inherit (self) outputs;
-    in
-    flake-parts.lib.mkFlake { inherit inputs; } {
-      # debug = true;
+    flake-parts.lib.mkFlake { inherit inputs; } ({ flake-parts-lib, ... }:
+      let
+        inherit (flake-parts-lib) importApply;
+        flakeModules.default = importApply ./modules/flake-module.nix { inherit inputs; };
+      in
+      {
+        # debug = true;
 
-      imports = [
-        inputs.devshell.flakeModule
-        inputs.treefmt-nix.flakeModule
-        ./hosts/flake-module.nix
-        ./modules/flake-module.nix
-        ./terraform/flake-module.nix
-      ];
+        imports = [
+          inputs.devshell.flakeModule
+          inputs.treefmt-nix.flakeModule
+          flakeModules.default
+          # ./hosts/flake-module.nix
+          ./hosts/hypernix
+          # ./modules/flake-module.nix
+          ./terraform/flake-module.nix
+        ];
 
-      systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+        systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
 
-      perSystem = { config, self', inputs', pkgs, system, ... }: {
-        # Per-system attributes can be defined here. The self' and inputs'
-        # module parameters provide easy access to attributes of the same
-        # system.
-        # packages = {
-        #   iso = inputs.nixos-generators.nixosGenerate {
-        #     inherit system;
-        #
-        #     format = "iso";
-        #
-        #     modules = [ ./hosts/iso ];
-        #   };
-        # };
-
-        # _module.args.pkgs = import inputs.nixpkgs {
-        #   inherit system;
-        #   overlays = [
-        #     inputs.deploy-rs.overlay
-        #   ];
-        #   config = { };
-        # };
-
-        devshells.default = {
-          packages = with pkgs; [
-            treefmt
-            terragrunt
-            terraform
-            terraform-ls
-            # deploy-rs
-          ];
-        };
-
-        treefmt.config = {
-          projectRootFile = "flake.nix";
-          package = pkgs.treefmt;
-
-          programs = {
-            nixpkgs-fmt.enable = true;
-            terraform.enable = true;
+        perSystem = { config, self', inputs', pkgs, system, ... }: {
+          _module.args.pkgs = import self.inputs.nixpkgs {
+            inherit system;
+            overlays = [
+              # self.overlays.default
+              # inputs.deploy-rs.overlay
+              inputs.microvm.overlay
+            ];
           };
-        };
-      };
 
-      flake = {
-        deploy.nodes.hypernix = {
-          hostname = "10.128.10.101";
-          profiles.system = {
-            user = "root";
-            sshUser = "kid";
-            remoteBuild = true;
-            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hypernix;
+          devshells.default = {
+            packages = with pkgs; [
+              nil
+              rnix-lsp
+              treefmt
+              terragrunt
+              terraform
+              terraform-ls
+              # deploy-rs
+            ];
+          };
+
+          treefmt.config = {
+            projectRootFile = "flake.nix";
+            package = pkgs.treefmt;
+
+            programs = {
+              nixpkgs-fmt.enable = true;
+              terraform.enable = true;
+            };
           };
         };
 
-        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
-      };
+        flake = {
+          deploy.nodes.hypernix = {
+            hostname = "10.128.10.20";
+            profiles.system = {
+              user = "root";
+              sshUser = "kid";
+              remoteBuild = true;
+              path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hypernix;
+            };
+          };
 
-      # flake = {
-      #   nixosConfigurations = {
-      #     # The usual flake attributes can be defined here, including x fmtsystem-
-      #     # agnostic ones like nixosModule and system-enumerating ones, although
-      #     # those are more easily expressed in perSystem.
-      #
-      #     # iso = inputs.nixpkgs.lib.nixosSystem {
-      #     #   specialArgs = { inherit inputs; };
-      #     #   modules = [ ./hosts/iso ];
-      #     # };
-      #
-      #     hypernix = inputs.nixpkgs.lib.nixosSystem {
-      #       specialArgs = { inherit inputs outputs; };
-      #       modules = [ ./hosts/hypernix ];
-      #     };
-      #     testvm1 = inputs.nixpkgs.lib.nixosSystem {
-      #       specialArgs = { inherit inputs outputs; };
-      #       modules = [
-      #         ./hosts/testvm1
-      #       ];
-      #     };
-      #   };
-      #
-      #   nixosModules = import ./modules/nixos { inherit self; };
-      # };
-    };
+          # nixosModules = {
+          #   flake-inputs = { _module.args.inputs = inputs; };
+          #   mixins-common-networking = ./modules/nixos/mixins/common/networking.nix;
+          #   profiles-server = ./modules/nixos/profiles/server.nix;
+          # };
+
+          checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+        };
+      });
 }

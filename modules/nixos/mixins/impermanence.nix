@@ -1,15 +1,16 @@
 {
   fileSystems."/nix".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
+  # fileSystems."/persist/home".neededForBoot = true;
 
   environment.persistence."/persist" = {
     directories = [
       "/etc/nixos"
       "/var/log"
       "/var/lib"
-      "/var/cache/powertop"
-      "/home"
-      "/root"
+      # "/var/cache/powertop"
+      # "/home"
+      # "/root"
     ];
 
     files = [
@@ -19,5 +20,7 @@
       "/etc/ssh/ssh_host_rsa_key"
       "/etc/ssh/ssh_host_rsa_key.pub"
     ];
+
+    users.kid.directories = [ "/" ];
   };
 }
