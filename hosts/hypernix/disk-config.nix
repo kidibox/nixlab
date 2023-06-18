@@ -1,5 +1,4 @@
 { lib, disks ? [ "/dev/disk/by-id/nvme-WD_BLACK_SN850X_1000GB_22518J459213" ], ... }: {
-  # { lib, disks ? [ "/dev/vda" ], ... }: {
   disk = lib.genAttrs disks (dev: {
     device = dev;
     type = "disk";
