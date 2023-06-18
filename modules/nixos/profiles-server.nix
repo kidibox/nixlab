@@ -1,14 +1,16 @@
-{ inputs, lib, pkgs, config, ... }:
+{ lib, pkgs, inputs, ... }:
 {
   imports = [
+    inputs.srvos.nixosModules.common
     # inputs.srvos.nixosModules.common
     # inputs.srvos.nixosModules.mixins-telegraf
     # config.flake.nixosModules.mixins-common-networking
-    ../mixins/common/networking.nix
+    # inputs.sops-nix.nixosModules.sops
+    ./mixins/common
+    ./mixins/observable/monitoring.nix
+    ./mixins/observable/logging.nix
+    ./mixins-impermanence.nix
   ];
-
-  # If the user is in @wheel they are trusted by default.
-  nix.settings.trusted-users = [ "root" "@wheel" ];
 
   # Enable SSH everywhere
   services.openssh.enable = true;
@@ -29,6 +31,7 @@
       htop
       powertop
       pciutils # for lspci
+      usbutils # for lsusb
       tcpdump
     ];
   };
@@ -39,4 +42,7 @@
   #
   # # Allow sudo from the @wheel group
   # security.sudo.enable = true;
+
+  services.iperf3.enable = true;
+  services.iperf3.openFirewall = true;
 }

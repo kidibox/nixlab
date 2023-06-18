@@ -1,9 +1,5 @@
-{ inputs, ... }:
+{ config, ... }:
 {
-  nixpkgs.overlays = [
-    inputs.microvm.overlay
-  ];
-
   microvm = {
     # declarativeUpdates = true;
     # restartIfChanged = true;
@@ -13,11 +9,13 @@
     vms.microvm2.config = {
       imports = [
         ../../modules/common.nix
-        inputs.microvm.nixosModules.microvm
+        # inputs.microvm.nixosModules.microvm
+        # config.flake.nixosModules.mixins-common-networking
         ({ pkgs, ... }: {
           environment.systemPackages = with pkgs; [
             htop
           ];
+          networking.useNetworkd = true;
         })
       ];
       # nixpkgs.hostPlatform.system = "x86_64-linux";

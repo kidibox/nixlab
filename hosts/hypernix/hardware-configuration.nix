@@ -17,20 +17,16 @@
 
     kernelParams = [
       # "pcie_aspm=force"
-      "intel_pstate=hwp_only"
-      # "nvme.noacpi=1"
+      # "intel_pstate=active"
+      "intel_pstate=no_hwp"
+      "nvme.noacpi=1"
       # "memsleep_default=deep"
     ];
   };
 
   disko.devices = import ./disk-config.nix { inherit lib; };
-  virtualisation.vmVariant = {
-    virtualisation.graphics = false;
-    virtualisation.useDefaultFilesystems = false;
-  };
 
   nixpkgs.hostPlatform.system = "x86_64-linux";
-  # hardware.enableRedistributableFirmware = true;
   nixpkgs.config.allowUnfree = true;
 
   powerManagement = {
@@ -50,4 +46,6 @@
     smartd.enable = true;
     thermald.enable = true;
   };
+
+  hardware.bluetooth.enable = false;
 }

@@ -1,5 +1,9 @@
-{ inputs }:
-{ self, lib, ... }:
+{ config, ... }:
 {
-  flake.nixosModules = import ./nixos { inherit self inputs lib; };
+  flake.nixosModules = config.flake.lib.importFilesToAttrs ./nixos [
+    "common"
+    "profiles-server"
+    "profiles-hypervisor"
+    "roles-syslog"
+  ];
 }

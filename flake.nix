@@ -1,8 +1,4 @@
 {
-  # nixConfig = {
-  #
-  #   extra-experimental-features = "nix-command flakes ca-derivations";
-  # };
   nixConfig = {
     extra-substituters = [
       "https://nix-community.cachix.org"
@@ -56,42 +52,50 @@
 
     deploy-rs = {
       url = "github:serokell/deploy-rs";
-    };
-
-    microvm = {
-      url = "github:oddlama/microvm.nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    # microvm = {
+    #   url = "github:oddlama/microvm.nix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
+    # std = {
+    #   url = "github:divnix/std";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
   };
 
   outputs = inputs@{ self, flake-parts, ... }:
-    flake-parts.lib.mkFlake { inherit inputs; } ({ flake-parts-lib, ... }:
-      let
-        inherit (flake-parts-lib) importApply;
-        flakeModules.default = importApply ./modules/flake-module.nix { inherit inputs; };
-      in
-      {
-        # debug = true;
+    flake-parts.lib.mkFlake { inherit inputs; } {
+      # debug = true;
 
-        imports = [
-          inputs.devshell.flakeModule
-          inputs.treefmt-nix.flakeModule
-          flakeModules.default
-          # ./hosts/flake-module.nix
-          ./hosts/hypernix
-          # ./modules/flake-module.nix
-          ./terraform/flake-module.nix
-        ];
+      imports = [
+        inputs.devshell.flakeModule
+        inputs.treefmt-nix.flakeModule
+        ./lib
+        ./hosts
+        ./modules/flake-module.nix
+        ./terraform/flake-module.nix
+      ];
 
-        systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+      systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
 
-        perSystem = { config, self', inputs', pkgs, system, ... }: {
+      perSystem = { config, self', inputs', pkgs, system, ... }:
+        {
           _module.args.pkgs = import self.inputs.nixpkgs {
-            inherit system;
+            inherit pkgs system;
             overlays = [
               # self.overlays.default
               # inputs.deploy-rs.overlay
-              inputs.microvm.overlay
+              # inputs.microvm.overlay
+              # inputs.deploy-rs.overlay
+              # (self: super: { deploy-rs = { inherit (pkgs) deploy-rs; lib = super.deploy-rs.lib; }; })
             ];
           };
 
@@ -103,7 +107,11 @@
               terragrunt
               terraform
               terraform-ls
-              # deploy-rs
+              cfssl
+              deploy-rs
+              sops
+              age
+              ssh-to-age
             ];
           };
 
@@ -118,24 +126,18 @@
           };
         };
 
-        flake = {
-          deploy.nodes.hypernix = {
-            hostname = "10.128.10.20";
-            profiles.system = {
-              user = "root";
-              sshUser = "kid";
-              remoteBuild = true;
-              path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hypernix;
-            };
+      flake = {
+        deploy.nodes.hypernix = {
+          hostname = "10.0.10.20";
+          profiles.system = {
+            user = "root";
+            sshUser = "kid";
+            remoteBuild = true;
+            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hypernix;
           };
-
-          # nixosModules = {
-          #   flake-inputs = { _module.args.inputs = inputs; };
-          #   mixins-common-networking = ./modules/nixos/mixins/common/networking.nix;
-          #   profiles-server = ./modules/nixos/profiles/server.nix;
-          # };
-
-          checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
         };
-      });
+
+        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+      };
+    };
 }

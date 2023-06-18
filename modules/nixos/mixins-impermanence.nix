@@ -1,4 +1,9 @@
+{ inputs, ... }:
 {
+  imports = [
+    inputs.impermanence.nixosModule
+  ];
+
   fileSystems."/nix".neededForBoot = true;
   fileSystems."/persist".neededForBoot = true;
   # fileSystems."/persist/home".neededForBoot = true;
