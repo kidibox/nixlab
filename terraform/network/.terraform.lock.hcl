@@ -2,23 +2,23 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/terraform-routeros/routeros" {
-  version     = "1.10.1"
-  constraints = "1.10.1"
+  version     = "1.10.4"
+  constraints = "1.10.4"
   hashes = [
-    "h1:0KTmdwp7Z7XJ8AhY+KWha1NHAkyeOkiiT3YgOSai+KU=",
-    "h1:1krFFNeuaD9u3PZnXSUj/UnZ/kPRrAx1/lLPEW3vkRQ=",
-    "h1:6PFbQ6YHPZrm58oE55DK+IWkuXKFyXUz0Ya6HNagyrg=",
-    "h1:8K1d5FN75aBS6zJFhCTvIPoPOLlcUQyQ0g4/TPcACIc=",
-    "h1:JpFSG0Gq4/xMuz2elU8HHhC8pjj4rJf3R+CBglYy0Is=",
-    "h1:NHaiK+YBbdvJ2fFdtiQvPLXUOR4AuCEtJYryD8GbsDA=",
-    "h1:PtkRbsfex6uSt6drFF5X8u+D2zVfWJuIzFhcVmAgOxw=",
-    "h1:V6v0qrFn0EgIujrpwekA9NKhBMShp8lFon/dINytrZg=",
-    "h1:VWCvniYKV9cHlwQFstn/uGmMbakYwcbynDgN83UO5Mg=",
-    "h1:ayWl3luTmrkVYkNdbnVcNMZxd9gEx+bDOyte3o9ZAdk=",
-    "h1:doD99C+lzs9bLUY84km96T/jT0dHCOjnmsZ5gfU+Ukc=",
-    "h1:fbCXWdIobaf43KQKhQRzkR1g567Fzl5URHDJAaep/wA=",
-    "h1:gx4gu+uqJ9xbbsCLzF0+AHu/W1X9p1qJy0e4ySnxuL4=",
-    "h1:lWlbYFbzaDLF6894H6tAKWHvS5uTXXSWwbrxH1LenB0=",
+    "h1:0g4TvyiZ4zmDOj45u4L2PqYjGk5IjNCsZxvXVEfisyI=",
+    "h1:1UJr8VeYfVUasMMt6AKYPFSovCIdxEpZ6FTFgn76ASk=",
+    "h1:AFxYXCWUMzIQu2OeLgsBw47YF1+QzwNOvre6ODvxBN0=",
+    "h1:AGAi7bt4FhFKrZcxFvKNI0dWcvPoEFt9bhK4GgTBllI=",
+    "h1:DfNuCKwPrF34X6Hk4nrt8f7BLKzT87lDGygSCgyvLSM=",
+    "h1:EQ3Poo82c9EYKyFs36Gr+3ZDJsoWSzG1KfVMA2KrtyY=",
+    "h1:GSIl4/KFdYQZ2cxKtGCIto8KZH4Eyx+cJXx9TozZsIU=",
+    "h1:KD5wEk8ASAaUVeP3h6fgodp2NtUaGg+Q2VL2a9My/s8=",
+    "h1:NX/hqH+uA+M1V7mvu87sfkJsQ6hLcN0BBd0jdQdoX9Y=",
+    "h1:Td553M1puWhkSztks7bW15vm71l4J64Cx/SQrN8LdI0=",
+    "h1:UuW2jBaNY54JKUlp0ib5wUBTsEopjQML5tCx4sL+Fv8=",
+    "h1:iswyYRv98JXKFJWSykVt8XQIJiP3B28R/Vg3Hpn8GaY=",
+    "h1:sE02ksfRCpfsbhDgDZ3B4l1z0FpFN2M2qCSNRWl10FA=",
+    "h1:wiK740KbYvwjjYsGtVQPpzpi5VEMdDc38HACMVgQU9E=",
   ]
 }
 
