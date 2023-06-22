@@ -5,20 +5,21 @@ provider "registry.terraform.io/terraform-routeros/routeros" {
   version     = "1.10.4"
   constraints = "1.10.4"
   hashes = [
-    "h1:0g4TvyiZ4zmDOj45u4L2PqYjGk5IjNCsZxvXVEfisyI=",
     "h1:1UJr8VeYfVUasMMt6AKYPFSovCIdxEpZ6FTFgn76ASk=",
-    "h1:AFxYXCWUMzIQu2OeLgsBw47YF1+QzwNOvre6ODvxBN0=",
-    "h1:AGAi7bt4FhFKrZcxFvKNI0dWcvPoEFt9bhK4GgTBllI=",
-    "h1:DfNuCKwPrF34X6Hk4nrt8f7BLKzT87lDGygSCgyvLSM=",
-    "h1:EQ3Poo82c9EYKyFs36Gr+3ZDJsoWSzG1KfVMA2KrtyY=",
-    "h1:GSIl4/KFdYQZ2cxKtGCIto8KZH4Eyx+cJXx9TozZsIU=",
-    "h1:KD5wEk8ASAaUVeP3h6fgodp2NtUaGg+Q2VL2a9My/s8=",
-    "h1:NX/hqH+uA+M1V7mvu87sfkJsQ6hLcN0BBd0jdQdoX9Y=",
-    "h1:Td553M1puWhkSztks7bW15vm71l4J64Cx/SQrN8LdI0=",
-    "h1:UuW2jBaNY54JKUlp0ib5wUBTsEopjQML5tCx4sL+Fv8=",
-    "h1:iswyYRv98JXKFJWSykVt8XQIJiP3B28R/Vg3Hpn8GaY=",
-    "h1:sE02ksfRCpfsbhDgDZ3B4l1z0FpFN2M2qCSNRWl10FA=",
-    "h1:wiK740KbYvwjjYsGtVQPpzpi5VEMdDc38HACMVgQU9E=",
+    "zh:06e384215a56745956366bbe947b6da9520aede924cca5ccacb10dafdc779fa1",
+    "zh:0bd58914a7be9c54e45759fb9c45a5705febbf4b982a922c8086981469a29607",
+    "zh:1998df35bbbf183fadfb8905fd357c67345a8f4f580046a3fc015ca672ffd54e",
+    "zh:3d773603114f1eb10d331148634445c9cddcfff8eba9057d9d94b7422e81263d",
+    "zh:4a603690d33ced4a84ea37639c7743aa2575a040e077d9a94c72239fc59a5c3a",
+    "zh:5d6e6d2bd8b694862a8cc7d186a3f2d8e8e3267e2255b28bd23742edb7bf1796",
+    "zh:650da833342d031dd44d11f3201661f8908a61b592e0650c0121d255d18910af",
+    "zh:780d20acce104efa760ea6a6b6f278c9063dc231af1cb40fc397ce6634d47554",
+    "zh:89006e5beb460e82c14421dfba07ac2ca64a3840f38fa02494e84910e53801e8",
+    "zh:98a67e8e3b7a3906cd177a76d2bd6cdd1fed9524b4974db231a4df0215c6ef20",
+    "zh:9acb2549fa60576abb1fc818394da2af9d101a4ccbeaa291ccd19fcd5c369cb3",
+    "zh:ab1939af662ef102561c1a91b7cace9968895ae3c4fa9950bf02fba5fe3ad9ab",
+    "zh:e334568420ff2ab8f053f89c44dd00116d9f97a2bce38f05d781b96480ba58b2",
+    "zh:ea7996c86d51ee77d1d16cc61c1acb0f94b0ae14be51b9d561adfaf65204ad9b",
   ]
 }
 
