@@ -5,5 +5,6 @@
     "profiles-server"
     "profiles-hypervisor"
     "roles-syslog"
+    "roles-printing"
   ];
 }
