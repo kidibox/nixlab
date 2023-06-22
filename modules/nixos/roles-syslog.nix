@@ -1,7 +1,12 @@
 {
-  # TODO make this a module
+  # TODO make this a module?
 
-  networking.firewall.allowedTCPPorts = [ 1514 ];
+  networking.firewall.allowedUDPPorts = [ 514 ];
+
+  networking.hosts = {
+    # Until reverse DNS works, avoid syslog showing `_gateway` as the host when using `use_dns(yes)`
+    "10.0.10.1" = [ "rb5009" ];
+  };
 
   services.syslog-ng = {
     enable = true;
@@ -9,9 +14,9 @@
       options {
         chain_hostnames(no);
         check_hostname(yes);
-        keep_hostname(no);
+        keep_hostname(yes);
         use_fqdn(no);
-        use_dns(no);
+        use_dns(yes);
       };
 
       source s_internal {
@@ -19,30 +24,30 @@
       };
 
       source s_network {
-        udp(port(1514));
+        udp(port(514));
       };
 
       destination d_loki {
-        syslog("localhost" transport("tcp") port(15014));
+        syslog("localhost" transport("tcp") port(1514));
       };
 
       log {
-        source(s_internal);
+        # source(s_internal);
         source(s_network);
         destination(d_loki);
       };
     '';
   };
 
+  # TODO only do this if promtail is enabled?
   services.promtail.configuration.scrape_configs = [
     {
       job_name = "syslog";
       syslog = {
-        listen_address = "0.0.0.0:15014";
-        listen_protocol = "tcp";
-        idle_timeout = "60s";
+        listen_address = "0.0.0.0:1514";
+        idle_timeout = "360s";
         label_structured_data = true;
-        # use_incoming_timestamp = true;
+        use_incoming_timestamp = true;
         labels = {
           job = "syslog";
         };
@@ -53,12 +58,21 @@
           target_label = "hostname";
         }
         {
-          source_labels = [ "__syslog_connection_hostname" ];
-          target_label = "syslog_hostname";
+          source_labels = [ "__syslog_message_severity" ];
+          target_label = "level";
         }
         {
-          regex = "__syslog_message_(.+)";
+          source_labels = [ "__syslog_message_app_name" ];
+          target_label = "application";
+        }
+        {
+          source_labels = [ "__syslog_message_facility" ];
+          target_label = "facility";
+        }
+        {
+          regex = "__syslog_message_sd_(.+)";
           action = "labelmap";
+          replacement = "sd_$1";
         }
       ];
     }
