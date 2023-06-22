@@ -19,6 +19,20 @@ provider "registry.terraform.io/terraform-routeros/routeros" {
     "h1:fbCXWdIobaf43KQKhQRzkR1g567Fzl5URHDJAaep/wA=",
     "h1:gx4gu+uqJ9xbbsCLzF0+AHu/W1X9p1qJy0e4ySnxuL4=",
     "h1:lWlbYFbzaDLF6894H6tAKWHvS5uTXXSWwbrxH1LenB0=",
+    "zh:02ba0c9a32997d3198c107953cd7664084f37dab7010ddaa0c1053ae63fe20d2",
+    "zh:164f0ff789f2167a7c47c8a16dec2f3ef81e6932723de83c2acd38aaab93af5f",
+    "zh:18b07cda56af8b3e372baf749ca0f6b59932bf4865dc44cce7159a920d519085",
+    "zh:19462fb8b4445dc7c8a1f993b85821b3c4e1d82f5d4a96d1adf7f40d03f7c63d",
+    "zh:1946a4f508fb71a2841388de9f3ac9e7199087feafd8b6390184a293b0948ddd",
+    "zh:312dea04c946a5249efdca3e6e1d513645b27841d5b107dfbf74d28d6c26153b",
+    "zh:3c531a6b3e01f537abb1530c42f874a23483dc2d79daee82e2cdae08920c9be0",
+    "zh:61965a645941eab715b68a7811b6392ad9cdfb6e45477f1ea8a6ad34773f5f93",
+    "zh:6b9260f4e4f73776fece3f318f429a3efccadee1ba9b2ba30ac929e964f84d2a",
+    "zh:7297dec9f57ae896d6c8fc418424ebdf00f4073cf75041941218eb77c929085f",
+    "zh:889c6d182716c35038add59107ce170e23c125d9f2d4fab6868f329300075f22",
+    "zh:8eaed8d748d94d50e963ab905aafdcb461050b618064139d97b3204172463fd3",
+    "zh:ba213dcd4ddd0c640d24365e314288df0b416fc36cdb7d216d608d39d5a68efe",
+    "zh:fde59298252aede552eb89321e5f2b338f5f8de60ec89381962ee0c03a53cf46",
   ]
 }
 
