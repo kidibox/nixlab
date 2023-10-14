@@ -1,4 +1,4 @@
-{ withSystem, inputs, config, lib, ... }: {
+{ self, withSystem, inputs, config, lib, ... }: {
   flake = withSystem "x86_64-linux" (
     { system
       # , pkgs
@@ -10,7 +10,7 @@
     {
       nixosConfigurations.${hostName} =
         let
-          specialArgs = { inherit inputs; };
+          specialArgs = { inherit inputs self; };
         in
         inputs.nixpkgs.lib.nixosSystem {
           inherit system specialArgs; # pkgs;
@@ -44,12 +44,28 @@
 
             ./hardware-configuration.nix
             ./networking.nix
+            # ./microvms.nix
+            ./cloudflared.nix
             {
               networking = {
                 inherit hostName;
                 # required by ZFS
                 hostId = "385f9236";
               };
+            }
+            {
+              services.consul.interface.bind = "br10";
+              services.consul.interface.advertise = "br10";
+              # microvm.vms.nomad-srv-0.specialArgs = specialArgs;
+              # microvm.vms.nomad-srv-0.config = config.flake.nixosConfigurations.nomad-srv-0.config;
+              # microvm.autostart = [
+              #   "nomad-srv-0"
+              # ];
+
+
+              # microvm.vms.nomad-srv-0 = {
+              #   flake = self;
+              # };
             }
           ];
         };

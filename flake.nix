@@ -60,10 +60,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    # microvm = {
-    #   url = "github:oddlama/microvm.nix";
-    #   inputs.nixpkgs.follows = "nixpkgs";
-    # };
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     # std = {
     #   url = "github:divnix/std";

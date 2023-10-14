@@ -4,6 +4,7 @@
     "common"
     "profiles-server"
     "profiles-hypervisor"
+    "profiles-microvm"
     "roles-syslog"
     "roles-printing"
   ];
