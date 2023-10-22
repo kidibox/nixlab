@@ -27,6 +27,9 @@ locals {
   wan_port = "ether8"
   ports = {
     sfp-sfpplus1 = {
+      pvid = local.vlans.srv.id
+    }
+    ether2 = {
       comment = "pve"
       pvid    = local.vlans.srv.id
       tagged = [
@@ -36,6 +39,7 @@ locals {
         local.vlans.iot.id,
         local.vlans.ioc.id,
         local.vlans.lan.id,
+        local.vlans.adm.id,
       ]
       # frame_types = "admit-only-vlan-tagged"
       frame_types = "admit-all"
@@ -53,10 +57,10 @@ locals {
       frame_types = "admit-only-vlan-tagged"
       # frame_types = "admit-all"
     }
-    ether2 = {
-      comment = "pve-ipmi"
-      pvid    = local.vlans.adm.id
-    }
+    # ether2 = {
+    #   comment = "pve-ipmi"
+    #   pvid    = local.vlans.adm.id
+    # }
     ether3 = {
       comment = "cap-xr-0"
       tagged = [
@@ -82,16 +86,19 @@ locals {
       pvid    = local.vlans.lan.id
     }
     ether6 = {
-      pvid = local.vlans.srv.id
+      comment = "sw-office"
+      # pvid    = local.vlans.adm.id
       tagged = [
-        # local.vlans.srv.id,
+        local.vlans.adm.id,
+        local.vlans.srv.id,
         local.vlans.media.id,
         # local.vlans.svc.id,
         local.vlans.iot.id,
         local.vlans.ioc.id,
         local.vlans.lan.id,
       ]
-      frame_types = "admit-all"
+      frame_types = "admit-only-vlan-tagged"
+      # frame_types = "admit-all"
     }
     ether7 = {
       comment = "doorbell"
@@ -243,9 +250,9 @@ resource "routeros_dhcp_server_lease" "static_hosts" {
 }
 
 resource "routeros_ip_dns" "upstream" {
-  servers               = "1.1.1.1"
-  use_doh_server        = "https://cloudflare-dns.com/dns-query"
-  verify_doh_cert       = true
+  servers = "1.1.1.1"
+  # use_doh_server        = "https://cloudflare-dns.com/dns-query"
+  # verify_doh_cert       = true
   allow_remote_requests = true
 }
 

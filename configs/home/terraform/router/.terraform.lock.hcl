@@ -1,0 +1,24 @@
+# This file is maintained automatically by "terraform init".
+# Manual edits may be lost in future updates.
+
+provider "registry.terraform.io/terraform-routeros/routeros" {
+  version     = "1.18.3"
+  constraints = "1.18.3"
+  hashes = [
+    "h1:d1Djj+fsiEi0ALFG62w0+NkEmVseJ4oZ/9Y/jGTJiow=",
+    "zh:087a206a157c991283a9725bf63d168e6349795821501a11060c0a346612dc48",
+    "zh:21c938d7f4ca3846b9d031c219e620d51353d5b851298ab00b35f33df5329652",
+    "zh:23d8567c70fb1bd2416b3890abf301696cd50bbe0b0be76e99f5133f0772c443",
+    "zh:3719f95e80bcd22548ea31a39fcba491ab2b3744db5e622851b008bdac1ca2ac",
+    "zh:3e35228c38968d2fa0a16a5262d819c993bfe60feae0f718123109a6c0a7a02b",
+    "zh:50a02fcf75a09fbcae1a1c01f6863eb2650234756514ab9b824644bbca4edb54",
+    "zh:76e316c5d122a5076da93b048c6fac6be20c3d1b41c2c4201fe1c810f65ef58c",
+    "zh:85386fc5d242bd996799236a0e5cf2db85900c7160926521276462513e95b994",
+    "zh:854005218f6b8def54013832f775def1c5cc5172ca348fb3963072074084ea88",
+    "zh:8799614928cbe77db1df9c53a21b696891f2ced5a1f133796daa3bb2d05f6f1f",
+    "zh:8c65c159d831b1a718c577586884f76a31e1849cd588259534a0535e8e1d570e",
+    "zh:d954ef25b8f469885eb8d3d96ca6b6f8a54e8e3accf81465cf147a244044db47",
+    "zh:f01ed9f49ab96d2d20bae6cbb6b0d3a1bce1afc4f828a65350d1695290bad453",
+    "zh:fa60c5135f139412b201d75521589e18a16362a40cb23f89190a2578fbb6d35a",
+  ]
+}
