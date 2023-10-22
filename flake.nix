@@ -90,6 +90,7 @@
         {
           _module.args.pkgs = import self.inputs.nixpkgs {
             inherit pkgs system;
+            config.allowUnfree = true;
             overlays = [
               # self.overlays.default
               # inputs.deploy-rs.overlay
