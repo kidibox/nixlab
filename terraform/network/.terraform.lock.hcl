@@ -2,24 +2,23 @@
 # Manual edits may be lost in future updates.
 
 provider "registry.terraform.io/terraform-routeros/routeros" {
-  version     = "1.10.4"
-  constraints = "1.10.4"
+  version     = "1.20.0"
+  constraints = "1.20.0"
   hashes = [
-    "h1:1UJr8VeYfVUasMMt6AKYPFSovCIdxEpZ6FTFgn76ASk=",
-    "zh:06e384215a56745956366bbe947b6da9520aede924cca5ccacb10dafdc779fa1",
-    "zh:0bd58914a7be9c54e45759fb9c45a5705febbf4b982a922c8086981469a29607",
-    "zh:1998df35bbbf183fadfb8905fd357c67345a8f4f580046a3fc015ca672ffd54e",
-    "zh:3d773603114f1eb10d331148634445c9cddcfff8eba9057d9d94b7422e81263d",
-    "zh:4a603690d33ced4a84ea37639c7743aa2575a040e077d9a94c72239fc59a5c3a",
-    "zh:5d6e6d2bd8b694862a8cc7d186a3f2d8e8e3267e2255b28bd23742edb7bf1796",
-    "zh:650da833342d031dd44d11f3201661f8908a61b592e0650c0121d255d18910af",
-    "zh:780d20acce104efa760ea6a6b6f278c9063dc231af1cb40fc397ce6634d47554",
-    "zh:89006e5beb460e82c14421dfba07ac2ca64a3840f38fa02494e84910e53801e8",
-    "zh:98a67e8e3b7a3906cd177a76d2bd6cdd1fed9524b4974db231a4df0215c6ef20",
-    "zh:9acb2549fa60576abb1fc818394da2af9d101a4ccbeaa291ccd19fcd5c369cb3",
-    "zh:ab1939af662ef102561c1a91b7cace9968895ae3c4fa9950bf02fba5fe3ad9ab",
-    "zh:e334568420ff2ab8f053f89c44dd00116d9f97a2bce38f05d781b96480ba58b2",
-    "zh:ea7996c86d51ee77d1d16cc61c1acb0f94b0ae14be51b9d561adfaf65204ad9b",
+    "h1:4Ojf2BJ7OKBILz5qkc2VP7Hw3Os7xRjo0Bm3zwP/Fas=",
+    "h1:C0zCDdvPjZ8dwLKWi9fJJa/7BRsT/iEzQ2CNDX9yRuI=",
+    "h1:EOGrgnaYMD1Gp34EgSpKb+37gCn+0ZndzgAOTlkzgCU=",
+    "h1:FVcqvw3Df29gc6jExd7NOZxQSKl9WkZ74ExZh3qSVVc=",
+    "h1:MzpQqmsoldR2d0aqZl9ZhId32qoGGhNi3Y0OBo9oKRs=",
+    "h1:PC7zAHEBWslXaVuq3/2ZiWybQ8ykgVsLcfHxlAIVeT8=",
+    "h1:R/B93h4nPQi/iV7/fZx2okHR3+Ql4OmHT9ZPgTmCGjI=",
+    "h1:ae7GHBAVnUqmSDWz/VT/OjwzOfQ8Od6InkhO+Bh3lHc=",
+    "h1:be6s5hkXOswC9m832OzslLvfSZ5YKIVO2cFnrhZveVo=",
+    "h1:e9wcY85LWFIHUubGuzD06Qw9kpzeKMZsIYfU+ByQLjs=",
+    "h1:fpl3gMKepwJyF/vEg4HvL5i4wPoeC6qe9AJlWuOvRnY=",
+    "h1:gyH84v1/YPLqP5d+gzZeuJqoLl3/15Q/nAyWuZgFN+0=",
+    "h1:iUCBip0TcLWD1EHqLSQWicsgVIAUPWl5U5X8lGRNz+k=",
+    "h1:jXCQoLrRLXe3N6ZYEJsb39KIJnDx4jrm6Ld6bXsbuXs=",
   ]
 }
 
