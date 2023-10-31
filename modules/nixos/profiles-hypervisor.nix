@@ -1,9 +1,5 @@
-{ pkgs, inputs, ... }:
+{ pkgs, ... }:
 {
-  imports = [
-    inputs.microvm.nixosModules.host
-  ];
-
   environment.systemPackages = with pkgs; [
     virt-manager
   ];

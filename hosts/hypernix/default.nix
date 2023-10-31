@@ -1,9 +1,5 @@
 { self, withSystem, inputs, config, lib, ... }: {
-  flake = withSystem "x86_64-linux" (
-    { system
-      # , pkgs
-    , ...
-    }:
+  flake = withSystem "x86_64-linux" ({ system, ... }:
     let
       hostName = "hypernix";
     in
@@ -13,7 +9,8 @@
           specialArgs = { inherit inputs self; };
         in
         inputs.nixpkgs.lib.nixosSystem {
-          inherit system specialArgs; # pkgs;
+          inherit system specialArgs;
+
 
           modules = lib.lists.flatten [
             ({ modulesPath, ... }: {
@@ -44,7 +41,6 @@
 
             ./hardware-configuration.nix
             ./networking.nix
-            # ./microvms.nix
             ./cloudflared.nix
             {
               networking = {
@@ -56,16 +52,6 @@
             {
               services.consul.interface.bind = "br10";
               services.consul.interface.advertise = "br10";
-              # microvm.vms.nomad-srv-0.specialArgs = specialArgs;
-              # microvm.vms.nomad-srv-0.config = config.flake.nixosConfigurations.nomad-srv-0.config;
-              # microvm.autostart = [
-              #   "nomad-srv-0"
-              # ];
-
-
-              # microvm.vms.nomad-srv-0 = {
-              #   flake = self;
-              # };
             }
           ];
         };
