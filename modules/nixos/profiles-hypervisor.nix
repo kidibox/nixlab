@@ -21,7 +21,7 @@
   };
 
   virtualisation.podman = {
-    enable = true;
+    enable = false;
   };
 
   services.nomad = {

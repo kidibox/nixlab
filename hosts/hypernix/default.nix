@@ -33,6 +33,7 @@
                 profiles-hypervisor
                 roles-syslog
                 roles-printing
+                roles-k3s-server
                 ;
             })
 
@@ -52,6 +53,14 @@
             {
               services.consul.interface.bind = "br10";
               services.consul.interface.advertise = "br10";
+            }
+            {
+              nixpkgs.config.allowUnfree = true;
+              nixpkgs.overlays = [
+                self.overlays.default
+              ];
+
+              nixlab.k3s.enable = true;
             }
           ];
         };

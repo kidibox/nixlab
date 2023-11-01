@@ -6,3 +6,4 @@ result
 *.tfvars
 *.tfstate
 *.tfstate.backup
+kubeconfig.yaml
