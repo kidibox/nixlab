@@ -14,6 +14,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-master.url = "github:NixOS/nixpkgs";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.05-small";
 
     devshell = {
@@ -65,6 +66,7 @@
       # debug = true;
 
       imports = [
+        inputs.flake-parts.flakeModules.easyOverlay
         inputs.devshell.flakeModule
         inputs.treefmt-nix.flakeModule
         ./lib
@@ -73,20 +75,32 @@
         ./terraform/flake-module.nix
       ];
 
-      systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" ];
+      systems = [
+        "x86_64-linux"
+        # "aarch64-linux" 
+        # "aarch64-darwin" 
+      ];
 
       perSystem = { config, self', inputs', pkgs, system, ... }:
-        {
-          _module.args.pkgs = import self.inputs.nixpkgs {
-            inherit pkgs system;
+        let
+          stable = import inputs.nixpkgs-stable {
+            inherit system;
             config.allowUnfree = true;
-            overlays = [
-              # self.overlays.default
-              # inputs.deploy-rs.overlay
-              # inputs.microvm.overlay
-              # inputs.deploy-rs.overlay
-              # (self: super: { deploy-rs = { inherit (pkgs) deploy-rs; lib = super.deploy-rs.lib; }; })
-            ];
+          };
+
+          master = import inputs.nixpkgs-master {
+            inherit system;
+            config.allowUnfree = true;
+          };
+        in
+        {
+          overlayAttrs = {
+            inherit stable master;
+          };
+
+          _module.args.pkgs = import self.inputs.nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
           };
 
           devshells.default = {
@@ -102,6 +116,9 @@
               sops
               age
               ssh-to-age
+              cilium-cli
+              hubble
+              fluxcd
             ];
           };
 

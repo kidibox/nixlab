@@ -79,6 +79,10 @@
           type = "zfs_fs";
           mountpoint = "/persist/home";
         };
+        "containerd" = {
+          type = "zfs_fs";
+          mountpoint = "/var/lib/containerd/io.containerd.snapshotter.v1.zfs";
+        };
       };
     };
   };
