@@ -5,7 +5,7 @@ kind: GitRepository
 metadata:
   name: home-kubernetes
 spec:
-  interval: 30m
+  interval: 10m
   url: ssh://git@github.com/kidibox/nixlab
   ref:
     branch: flux-test
