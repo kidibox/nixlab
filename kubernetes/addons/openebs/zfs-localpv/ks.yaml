@@ -25,6 +25,24 @@ spec:
   sourceRef:
     kind: GitRepository
     name: openebs-zfs-localpv
-  targetNamespace: openebs
   timeout: 3m0s
   wait: true
+  patches:
+    - patch: |-
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: openebs-zfspv-bin
+          namespace: kube-system
+        data:
+          zfs: |
+            #!/bin/sh
+            if [ -x /host/sbin/zfs ]; then
+              chroot /host /sbin/zfs "$@"
+            elif [ -x /host/usr/sbin/zfs ]; then
+              chroot /host /usr/sbin/zfs "$@"
+            elif [ /host/run/current-system ]; then
+              chroot /host /run/current-system/sw/bin/zfs "$@"
+            else
+              chroot /host zfs "$@"
+            fi
