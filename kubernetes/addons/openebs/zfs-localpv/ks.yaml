@@ -1,4 +1,16 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/source.toolkit.fluxcd.io/gitrepository_v1.json
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: openebs-zfs-localpv
+  namespace: flux-system
+spec:
+  interval: 30m0s
+  url: https://github.com/openebs/zfs-localpv
+  ref:
+    tag: v2.3.0
+---
 # yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/kustomize.toolkit.fluxcd.io/kustomization_v1.json
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
