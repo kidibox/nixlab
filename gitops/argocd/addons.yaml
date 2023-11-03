@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: addons
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions:
+    - missingkey=error
+  generators:
+    git:
+      repoURL: ssh://git@github.com/kidibox/nixlab
+      targetRevision: flux-test
+      directories:
+        - path: gitops/addons
+  template:
+    metadata:
+      name: "{{.path.basename}}"
+    spec:
+      project: default
+      source:
+        repoURL: ssh://git@github.com/kidibox/nixlab
+        targetRevision: flux-test
+        path: "{{.path.path}}"
+      destination:
+        server: https://kubernetes.default.svc
