@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Secret
+metadata:
+    name: kidibox-nixlab
+    namespace: argocd
+    labels:
+        argocd.argoproj.io/secret-type: repository
+stringData:
+    type: ENC[AES256_GCM,data:19Hz,iv:j1UbYR9vVdpRt7G19dyr09EK8lPIBjgyiqcGULqJm5Q=,tag:4dqO3Vt58ntqgqXOIXBpBA==,type:str]
+    url: ENC[AES256_GCM,data:BeqO9POPyrPCFuRD/fs1E+S3Mau9eiJi0D4G+mg=,iv:CNuekx+X/E6xa6yu8s+dRpt1hQ0ITRS1feKEtIk1Sco=,tag:6KCW3vg4s0hmH/WvoZzbJQ==,type:str]
+    sshPrivateKey: ENC[AES256_GCM,data:504CqxFBD71IK/sk21y+3pSMmAEWaMTgiQyteW1Ti4WDLmz6lCzPUNqbK/A8DBLnH6kfnG0bAQwQ++RQ9SmdV+LogF5H7QqOSZTCWod76xJo8mZhN2jm22xQZocMDMLEV+GWXXE22B6upxDK+vTK1PdqXUtoaREHrJ5unx2sFlfjDG/x60oGORbWVMa7Ql+t/U/CLXENx/Ks1GP4kw+0o3H0MBydxZQHlVqoGBMxpPnbTwXbP661VW01326Ge4G/gQEP9uR1vLkp6QAfSDKGQddbPqEmqNPz9k99+QGirgfw65phy57DiEYLfdxeBIc9sJKrfnOlVizmBJEwLgLHTBOjiCcvNOYO5SIe/HpqNI1F7W0aBh0/5O10o4eg1O5jpliXpbNA/JYIX2ZVjPmw6mQGPNXuX04MQJFo/02jkBS6BHlb49SZL678Mb7kcq0BcSwMcyT6kU0IG3AgKyGdfk6psyxz1sT5UudbZX9hPLb4YgU4LYeWxDzcL1Qf+tiwcU/kF7kdOYOghmHexEyDVnLvpPD9FqMbbl4xC+tuGHkyg+qh+zJJFP0YvomUIiMbZ1uyniDy4qZ6kny89ESTZqbhWXB4y1EOUBFwhiu23jaDlArrWyCOKfpA6DkmcUlMSbbhHjumkNz6Q+SxXb2TfG1fXrfuM+yNwKZf3iAwikHqhm6K+6aQQcQXFmhgpX/zmivdnqIWQSLsPo16Ow37SN8/ODQ6NK74OYEIxqntg6jtxC7mfAqYduhCaeYmAtQMPwHh98UoJ9gkqdSzGfXo7XkIcqevlwTV4Nc4JXzknCG4h6+Lby/dpSn42z7wOlmiXMVDWId6GW+DSciqUT0jH0xWXy5UBPUcJrTjTebmHOeMtAiwuraRSDy1koWU/wngmS66lfhWsh7ACPR4JUsq0+5FWqwtxoWCP/v05ATdOyp8GwjxaUo7AfIz04ognJQicjDWJQMoh29uG0adFmwDag==,iv:aq14dnM2MOBfdWQ6um5C3sStFuCh7q6BeonI/TFYl+Q=,tag:WHOydANjo2v8RgK5zFCOzg==,type:str]
+sops:
+    kms: []
+    gcp_kms: []
+    azure_kv: []
+    hc_vault: []
+    age:
+        - recipient: age1dghfu7sxwlkf4626eywmgr63y2g7m4x8zs8a6xt2zay3x7dclpnsw776dd
+          enc: |
+            -----BEGIN AGE ENCRYPTED FILE-----
+            YWdlLWVuY3J5cHRpb24ub3JnL3YxCi0+IFgyNTUxOSA0SVJmcE0xSUEyaSttZzZP
+            TVg4WElzS0tmeHJOZmd3RkxjM01PRk5FeFVBCmRjK2xmTWdCOHZDeUhLbE0yRjlI
+            WnZTSURrcFBSYWhFdVQ5YjhVUmp1Y00KLS0tIElPMTZqS2pVQWJGTmIvbnRsQm5T
+            SmRLQ1F1KysreHlDSzV3MEpSZW44Q1UKs0QCEu/AhzoxSne70bBKOhfBRf/YJ+wU
+            Vi6Ld6QxgLkmxzo0oxNlXBRLhBFZ3j+opyT64FWwjvOiPzb9dekaew==
+            -----END AGE ENCRYPTED FILE-----
+    lastmodified: "2023-11-02T21:41:19Z"
+    mac: ENC[AES256_GCM,data:mqGoAPkQbE6meonyRvWWGhmcYtjcsDX985TXz9Jkn3uI0v/tn8o4LpmiTSYie0FhKn4I66918B0mPqKpFD0qa018VVZJ60R3DVsV6QGV7KgMbNemlsraqtk+2d5GtT2wkvRq+bOOAroi3Rm8xojNHmfWxzI6MfqeGXfmM+hHmOA=,iv:nIrYAwdFqitRYHLEuX1AJ0/379r7GfUTaImg+rE0kwA=,tag:QgSeBWN2aAcD0/GKyXPtcQ==,type:str]
+    pgp: []
+    encrypted_regex: ^(data|stringData)$
+    version: 3.8.1

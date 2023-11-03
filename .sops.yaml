@@ -1,12 +1,21 @@
 keys:
   - &kid-nixos age1dghfu7sxwlkf4626eywmgr63y2g7m4x8zs8a6xt2zay3x7dclpnsw776dd
   - &hypernix age1rtvuvel2qhaa00uszwps8pq5vkf2sl9x4696vur5ntle90rclcqq3zvd08
+
+defaults: &defaults
+  key_groups:
+    - age:
+        - *kid-nixos
+
 creation_rules:
   - path_regex: hosts/hypernix/[^/]+\.sops\.yaml$
     key_groups:
       - age:
           - *kid-nixos
           - *hypernix
-  - key_groups:
-      - age:
-          - *kid-nixos
+
+  - path_regex: gitops/.*\.sops\.ya?ml
+    encrypted_regex: ^(data|stringData)$
+    <<: *defaults
+
+  - <<: *defaults
