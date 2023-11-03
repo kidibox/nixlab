@@ -5,3 +5,6 @@ kind: Kustomization
 resources:
   - github.com/openebs/zfs-localpv/deploy/yamls?ref=v2.3.0
   - ./storageclass.yaml
+
+patches:
+  - path: ./patches/openebs-zfspv-bin.yaml
