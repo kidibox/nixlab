@@ -10,7 +10,7 @@ spec:
   generators:
     - git:
         repoURL: ssh://git@github.com/kidibox/nixlab
-        targetRevision: flux-test
+        revision: flux-test
         directories:
           - path: gitops/addons
   template:
