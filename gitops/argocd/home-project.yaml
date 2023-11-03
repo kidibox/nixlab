@@ -9,3 +9,6 @@ metadata:
 spec:
   sourceRepos:
     - "kidibox-nixlab"
+  destinations:
+    - server: https://kubernetes.default.svc
+      namespace: "*"

@@ -7,6 +7,7 @@ resources:
   - ./namespace.yaml
   - github.com/argoproj/argo-cd/manifests/core-install?ref=v2.8.6
   - ./home-project.yaml
+  - ./applications/argocd.yaml
   - ./applications/guestbook.yaml
 
 patches:
