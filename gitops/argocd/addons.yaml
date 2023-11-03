@@ -12,7 +12,7 @@ spec:
         repoURL: ssh://git@github.com/kidibox/nixlab
         revision: flux-test
         directories:
-          - path: gitops/addons
+          - path: gitops/addons/*
   template:
     metadata:
       name: "{{.path.basename}}"
