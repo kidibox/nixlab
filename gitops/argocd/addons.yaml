@@ -8,11 +8,11 @@ spec:
   goTemplateOptions:
     - missingkey=error
   generators:
-    git:
-      repoURL: ssh://git@github.com/kidibox/nixlab
-      targetRevision: flux-test
-      directories:
-        - path: gitops/addons
+    - git:
+        repoURL: ssh://git@github.com/kidibox/nixlab
+        targetRevision: flux-test
+        directories:
+          - path: gitops/addons
   template:
     metadata:
       name: "{{.path.basename}}"
