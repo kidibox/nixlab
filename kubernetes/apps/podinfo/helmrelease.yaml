@@ -1,0 +1,22 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: podinfo
+  namespace: podinfo
+spec:
+  chart:
+    spec:
+      chart: podinfo # Must be the same as the upstream chart name
+      version: 6.5.3 # Pin to semver major versions to avoid breaking changes but still get bugfixes/updates
+      sourceRef:
+        kind: HelmRepository
+        name: podinfo
+  interval: 15m
+  timeout: 5m
+  releaseName: podinfo # _may_ be different from the upstream chart name, but could cause confusion
+  valuesFrom:
+    - kind: ConfigMap
+      name: helmrelease-value-overrides # Align with the name of the ConfigMap containing all values
+      valuesKey: values.yaml # This is the default, but best to be explicit for clarity
