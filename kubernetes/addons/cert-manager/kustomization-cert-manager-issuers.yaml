@@ -3,11 +3,11 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cert-manager-issuers
+  name: addons-cert-manager-issuers
   namespace: flux-system
 spec:
   dependsOn:
-    - name: cert-manager
+    - name: addons-cert-manager
   path: ./kubernetes/addons/cert-manager/issuers
   prune: true
   sourceRef:
