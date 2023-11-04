@@ -14,6 +14,10 @@ creation_rules:
           - *kid-nixos
           - *hypernix
 
+  - path_regex: kubernetes/.*\.sops\.ya?ml
+    encrypted_regex: ^(data|stringData)$
+    <<: *defaults
+
   - path_regex: gitops/.*\.sops\.ya?ml
     encrypted_regex: ^(data|stringData)$
     <<: *defaults

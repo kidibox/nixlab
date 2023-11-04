@@ -8,7 +8,7 @@ spec:
   project: default
   source:
     repoURL: ssh://git@github.com/kidibox/nixlab
-    targetRevision: flux-test
+    targetRevision: argocd-test
     path: gitops/argocd
   destination:
     server: https://kubernetes.default.svc

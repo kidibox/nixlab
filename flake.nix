@@ -119,6 +119,17 @@
               cilium-cli
               hubble
               fluxcd
+              argocd
+              kind
+              kustomize
+              (kustomize-sops.overrideAttrs (oldAttrs: {
+                installPhase = oldAttrs.installPhase + ''
+                  mkdir -p $out/bin/
+                  mkdir -p $out/lib/viaduct.ai/v1/ksops/
+                  ln -s $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec $out/lib/viaduct.ai/v1/ksops/ksops
+                  ln -s $out/lib/viaduct.ai/v1/ksops-exec/ksops-exec $out/bin/ksops
+                '';
+              }))
             ];
           };
 
