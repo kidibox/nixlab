@@ -7,7 +7,7 @@ spec:
   selector:
     app: overseer
   ports:
-    - name: overseer
+    - name: web
       protocol: TCP
       port: 8080
       targetPort: web

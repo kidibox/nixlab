@@ -60,10 +60,10 @@ spec:
             - name: TZ
               value: Europe/Brussels
             - name: PORT
-              value: "5555"
+              value: "8080"
           ports:
-            - containerPort: 5555
+            - containerPort: 8080
               name: web
           volumeMounts:
             - name: config
-              mountPath: /app/config
+              mountPath: /config
