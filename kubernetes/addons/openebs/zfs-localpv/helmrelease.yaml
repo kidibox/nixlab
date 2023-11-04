@@ -1,4 +1,5 @@
 ---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/helm.toolkit.fluxcd.io/helmrelease_v2beta1.json
 apiVersion: helm.toolkit.fluxcd.io/v2beta1
 kind: HelmRelease
 metadata:
@@ -15,3 +16,23 @@ spec:
         name: zfs-localpv
         namespace: openebs
       interval: 12h
+  postRenderers:
+    - kustomize:
+        patchesStrategicMerge:
+          - apiVersion: v1
+            kind: ConfigMap
+            metadata:
+              name: openebs-zfspv-bin
+              namespace: openebs
+            data:
+              zfs: |
+                #!/bin/sh
+                if [ -x /host/sbin/zfs ]; then
+                  chroot /host /sbin/zfs "$@"
+                elif [ -x /host/usr/sbin/zfs ]; then
+                  chroot /host /usr/sbin/zfs "$@"
+                elif [ -L /host/sw/current-system ]; then
+                  chroot /host /sw/current-system/bin/zfs "$@"
+                else
+                  chroot /host "zfs" "$@"
+                fi
