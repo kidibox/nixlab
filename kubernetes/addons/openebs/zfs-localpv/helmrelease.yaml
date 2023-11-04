@@ -31,8 +31,8 @@ spec:
                   chroot /host /sbin/zfs "$@"
                 elif [ -x /host/usr/sbin/zfs ]; then
                   chroot /host /usr/sbin/zfs "$@"
-                elif [ -L /host/sw/current-system ]; then
-                  chroot /host /sw/current-system/bin/zfs "$@"
+                elif [ -L /host/run/current-system ]; then
+                  chroot /host /run/current-system/sw/bin/zfs "$@"
                 else
                   chroot /host "zfs" "$@"
                 fi
