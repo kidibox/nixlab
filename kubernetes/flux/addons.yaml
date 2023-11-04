@@ -1,0 +1,14 @@
+---
+# yaml-language-server: $schema=https://kubernetes-schemas.devbu.io/kustomize.toolkit.fluxcd.io/kustomization_v1.json
+apiVersion: kustomize.toolkit.fluxcd.io/v1
+kind: Kustomization
+metadata:
+  name: addons
+  namespace: flux-system
+spec:
+  interval: 1h
+  path: kubernetes/addons
+  prune: true # remove any elements later removed from the above path
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
