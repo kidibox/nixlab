@@ -12,7 +12,6 @@ spec:
     solvers:
       - dns01:
           cloudflare:
-            email: arnaud.rebts@gmail.com
             apiTokenSecretRef:
               name: cloudflare
-              key: api-key
+              key: api-token
