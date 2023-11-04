@@ -6,8 +6,6 @@ metadata:
   name: apps
   namespace: flux-system
 spec:
-  dependsOn:
-    - name: addons
   interval: 1h
   path: kubernetes/apps
   prune: true # remove any elements later removed from the above path
