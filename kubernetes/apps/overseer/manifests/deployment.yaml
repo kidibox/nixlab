@@ -11,11 +11,11 @@ spec:
     matchLabels:
       app: overseer
   replicas: 1
-  # strategy:
-  #   rollingUpdate:
-  #     maxSurge: 25%
-  #     maxUnavailable: 25%
-  #   type: RollingUpdate
+  strategy:
+    #   rollingUpdate:
+    #     maxSurge: 25%
+    #     maxUnavailable: 25%
+    type: Recreate
   template:
     metadata:
       labels:
