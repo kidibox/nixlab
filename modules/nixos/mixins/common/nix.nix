@@ -1,6 +1,6 @@
 { inputs, ... }:
 {
-  # TODO find a better place for this
+  # TODO find a better place for this?
   system.stateVersion = "23.05";
 
   nix = {

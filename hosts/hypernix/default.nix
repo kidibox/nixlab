@@ -1,69 +1,49 @@
-{ self, withSystem, inputs, config, lib, ... }: {
-  flake = withSystem "x86_64-linux" ({ system, ... }:
-    let
-      hostName = "hypernix";
-    in
-    {
-      nixosConfigurations.${hostName} =
-        let
-          specialArgs = { inherit inputs self; };
-        in
-        inputs.nixpkgs.lib.nixosSystem {
-          inherit system specialArgs;
+{ self, modulesPath, inputs, config, lib, ... }:
+{
+  imports = lib.lists.flatten [
+    "${modulesPath}/installer/scan/not-detected.nix"
+    "${modulesPath}/profiles/minimal.nix"
+    "${modulesPath}/profiles/headless.nix"
 
+    (builtins.attrValues {
+      inherit (inputs.nixos-hardware.nixosModules)
+        common-pc
+        common-pc-ssd
+        common-cpu-intel
+        ;
+    })
 
-          modules = lib.lists.flatten [
-            ({ modulesPath, ... }: {
-              imports = [
-                "${modulesPath}/installer/scan/not-detected.nix"
-                "${modulesPath}/profiles/minimal.nix"
-                "${modulesPath}/profiles/headless.nix"
-              ];
-            })
+    # inputs.disko.nixosModules.disko
+    inputs.srvos.nixosModules.common
 
-            (builtins.attrValues {
-              inherit (inputs.nixos-hardware.nixosModules)
-                common-pc
-                common-pc-ssd
-                common-cpu-intel
-                ;
+    #
+    #   inherit (config.flake.nixosModules)
+    #     profiles-server
+    #     profiles-hypervisor
+    #     roles-syslog
+    #     roles-printing
+    #     roles-k3s-server
+    #     ;
+    # })
 
-              inherit (config.flake.nixosModules)
-                profiles-server
-                profiles-hypervisor
-                roles-syslog
-                roles-printing
-                roles-k3s-server
-                ;
-            })
+    ../../modules/nixos/profiles-server.nix
+    ../../modules/nixos/profiles-hypervisor.nix
+    ../../modules/nixos/roles-syslog.nix
+    ../../modules/nixos/roles-printing.nix
+    ../../modules/nixos/roles-k3s-server.nix
+    #
+    ./hardware-configuration.nix
+    ./networking.nix
+    ./cloudflared.nix
+  ];
 
-            inputs.disko.nixosModules.disko
-            inputs.srvos.nixosModules.common
+  # required by ZFS
+  networking. hostId = "385f9236";
 
-            ./hardware-configuration.nix
-            ./networking.nix
-            ./cloudflared.nix
-            {
-              networking = {
-                inherit hostName;
-                # required by ZFS
-                hostId = "385f9236";
-              };
-            }
-            {
-              services.consul.interface.bind = "br10";
-              services.consul.interface.advertise = "br10";
-            }
-            {
-              nixpkgs.config.allowUnfree = true;
-              nixpkgs.overlays = [
-                self.overlays.default
-              ];
+  nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [
+    self.overlays.default
+  ];
 
-              nixlab.k3s.enable = true;
-            }
-          ];
-        };
-    }
-  );
+  nixlab.k3s.enable = true;
 }

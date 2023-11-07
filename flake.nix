@@ -111,7 +111,6 @@
               terragrunt
               terraform
               terraform-ls
-              cfssl
               deploy-rs
               sops
               age
@@ -122,6 +121,10 @@
             ];
           };
 
+          packages = {
+            installer_iso = self.nixosConfigurations.installer.config.formats.install-iso;
+          };
+
           treefmt.config = {
             projectRootFile = "flake.nix";
             package = pkgs.treefmt;
@@ -129,18 +132,27 @@
             programs = {
               nixpkgs-fmt.enable = true;
               terraform.enable = true;
+              prettier = {
+                enable = true;
+                excludes = [
+                  "kubernetes/flux/flux-system/*.yaml"
+                  "*.sops.yaml"
+                ];
+              };
             };
           };
         };
 
       flake = {
-        deploy.nodes.hypernix = {
-          hostname = "10.0.10.20";
-          profiles.system = {
-            user = "root";
-            sshUser = "kid";
-            remoteBuild = true;
-            path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hypernix;
+        deploy.nodes = {
+          hypernix = {
+            hostname = "10.0.10.20";
+            profiles.system = {
+              user = "root";
+              sshUser = "kid";
+              remoteBuild = true;
+              path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hypernix;
+            };
           };
         };
 
