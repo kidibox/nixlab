@@ -115,7 +115,6 @@ in
   config = mkIf cfg.enable {
     services.k3s = {
       enable = true;
-      package = pkgs.stable.k3s;
       role = "server";
       extraFlags = toString [
         "--kubelet-arg=\"config=${kubeletConfig}\""
