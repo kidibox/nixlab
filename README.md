@@ -43,3 +43,8 @@ https://forum.level1techs.com/t/solved-linux-vm-bridged-network-arp-ok-no-ip-tra
 
 https://github.com/oddlama/nix-config Uses of microvms with impermanence
 https://github.com/viperML/dotfiles
+
+# flux
+
+https://geek-cookbook.funkypenguin.co.nz/kubernetes/deployment/flux/operate/#making-changes
+https://github.com/onedr0p/home-ops
