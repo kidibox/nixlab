@@ -268,3 +268,16 @@ resource "routeros_dns_record" "static_hosts" {
   address  = routeros_dhcp_server_lease.static_hosts[each.key].address
   name     = "${each.key}.${local.tld}"
 }
+
+resource "routeros_routing_bgp_connection" "hypernix_k3s" {
+  name = "toHypernix"
+  as   = 64512
+
+  local {
+    role = "ebgp"
+  }
+
+  remote {
+    address = local.hosts.hypernix.ip
+  }
+}
