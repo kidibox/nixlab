@@ -14,8 +14,8 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-master.url = "github:NixOS/nixpkgs";
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-23.05-small";
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
 
     devshell = {
       url = "github:numtide/devshell";
@@ -31,17 +31,13 @@
       url = "github:nix-community/impermanence";
     };
 
-    nixos-hardware = {
-      url = "github:NixOS/nixos-hardware";
-    };
-
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     srvos = {
-      url = "github:numtide/srvos";
+      url = "github:nix-community/srvos";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -71,31 +67,24 @@
         inputs.treefmt-nix.flakeModule
         ./lib
         ./hosts
-        ./modules/flake-module.nix
-        ./terraform/flake-module.nix
+        ./modules
+        ./tooling.nix
       ];
 
       systems = [
         "x86_64-linux"
-        # "aarch64-linux" 
-        # "aarch64-darwin" 
       ];
 
-      perSystem = { config, self', inputs', pkgs, system, ... }:
+      perSystem = { config, pkgs, system, ... }:
         let
           stable = import inputs.nixpkgs-stable {
-            inherit system;
-            config.allowUnfree = true;
-          };
-
-          master = import inputs.nixpkgs-master {
             inherit system;
             config.allowUnfree = true;
           };
         in
         {
           overlayAttrs = {
-            inherit stable master;
+            inherit stable;
           };
 
           _module.args.pkgs = import self.inputs.nixpkgs {
@@ -103,44 +92,6 @@
             config.allowUnfree = true;
           };
 
-          devshells.default = {
-            packages = with pkgs; [
-              nil
-              rnix-lsp
-              treefmt
-              terragrunt
-              terraform
-              terraform-ls
-              deploy-rs
-              sops
-              age
-              ssh-to-age
-              cilium-cli
-              hubble
-              fluxcd
-            ];
-          };
-
-          packages = {
-            installer_iso = self.nixosConfigurations.installer.config.formats.install-iso;
-          };
-
-          treefmt.config = {
-            projectRootFile = "flake.nix";
-            package = pkgs.treefmt;
-
-            programs = {
-              nixpkgs-fmt.enable = true;
-              terraform.enable = true;
-              prettier = {
-                enable = true;
-                excludes = [
-                  "kubernetes/flux/flux-system/*.yaml"
-                  "*.sops.yaml"
-                ];
-              };
-            };
-          };
         };
 
       flake = {
@@ -156,7 +107,7 @@
           };
         };
 
-        checks = builtins.mapAttrs (system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
+        checks = builtins.mapAttrs (_system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
       };
     };
 }
