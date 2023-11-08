@@ -4,10 +4,6 @@ terraform {
       source  = "terraform-routeros/routeros"
       version = "1.22.0"
     }
-    zerotier = {
-      source  = "zerotier/zerotier"
-      version = "1.4.0"
-    }
   }
 }
 
