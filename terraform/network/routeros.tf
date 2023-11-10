@@ -147,76 +147,6 @@ locals {
   vlan_cidrs = { for k, v in local.vlans : k => lookup(v, "cidr", cidrsubnet(local.cidr, 15, v.id)) }
 }
 
-resource "routeros_ip_dhcp_client" "wan" {
-  interface         = local.wan_port
-  add_default_route = "yes"
-  use_peer_dns      = false
-  use_peer_ntp      = false
-}
-
-resource "routeros_interface_bridge" "bridge" {
-  name           = "bridge1"
-  vlan_filtering = true
-  frame_types    = "admit-only-vlan-tagged"
-}
-
-resource "routeros_interface_vlan" "vlan" {
-  for_each  = local.vlans
-  name      = each.key
-  interface = routeros_interface_bridge.bridge.name
-  vlan_id   = each.value.id
-}
-
-resource "routeros_ip_address" "vlan" {
-  for_each  = local.vlan_cidrs
-  interface = routeros_interface_vlan.vlan[each.key].name
-  network   = split("/", local.vlan_cidrs[each.key])[0]
-  address   = "${cidrhost(each.value, 1)}/${split("/", each.value)[1]}"
-}
-
-resource "routeros_ip_pool" "vlans" {
-  for_each = local.vlan_cidrs
-  name     = each.key
-  ranges   = ["${cidrhost(each.value, 100)}-${cidrhost(each.value, 200)}"]
-}
-
-resource "routeros_ip_dhcp_server" "vlans" {
-  depends_on   = [routeros_interface_vlan.vlan]
-  for_each     = local.vlans
-  name         = each.key
-  interface    = each.key
-  lease_time   = "1d"
-  address_pool = routeros_ip_pool.vlans[each.key].name
-}
-
-resource "routeros_dhcp_server_network" "vlans" {
-  for_each   = local.vlan_cidrs
-  address    = each.value
-  gateway    = cidrhost(each.value, 1)
-  dns_server = cidrhost(each.value, 1)
-  domain     = "${each.key}.${local.tld}"
-}
-
-resource "routeros_interface_bridge_port" "ports" {
-  for_each    = local.ports
-  comment     = lookup(each.value, "comment", null)
-  bridge      = routeros_interface_bridge.bridge.name
-  interface   = each.key
-  pvid        = lookup(each.value, "pvid", 1)
-  frame_types = lookup(each.value, "frame_types", "admit-only-untagged-and-priority-tagged")
-  hw          = true
-}
-
-resource "routeros_interface_bridge_vlan" "vlans" {
-  for_each = local.vlans
-  bridge   = routeros_interface_bridge.bridge.name
-  vlan_ids = tostring(each.value.id)
-  tagged = concat(
-    [routeros_interface_bridge.bridge.name],
-    [for k, v in local.ports : k if contains(lookup(v, "tagged", []), each.value.id)]
-  )
-  untagged = [for k, v in local.ports : k if lookup(v, "pvid", 0) == each.value.id]
-}
 
 resource "routeros_interface_list" "wan" {
   name = "WAN"
@@ -235,18 +165,6 @@ resource "routeros_interface_list_member" "lan_trusted_vlans" {
   for_each  = { for k, v in local.vlans : k => v if lookup(v, "trusted", true) }
   list      = routeros_interface_list.lan_trusted.name
   interface = each.key
-}
-
-resource "routeros_dhcp_server_lease" "static_hosts" {
-  lifecycle {
-    # avoids conflicts when making changes
-    create_before_destroy = false
-  }
-
-  for_each    = { for k, v in local.hosts : k => v }
-  comment     = each.key
-  address     = each.value.ip
-  mac_address = upper(each.value.mac)
 }
 
 resource "routeros_ip_dns" "upstream" {
