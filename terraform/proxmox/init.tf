@@ -126,5 +126,9 @@ module "deploy" {
 }
 
 output "control_plane_ips" {
-  value = [for ip in flatten(proxmox_virtual_environment_vm.control_plane.*.ipv4_addresses) : ip if ip != "127.0.0.1"]
+  value = [
+    for host in range(0, local.control_plane_nodes) : [
+      for ip in flatten(proxmox_virtual_environment_vm.control_plane[host].ipv4_addresses) : ip if ip != "127.0.0.1"
+    ]
+  ]
 }
