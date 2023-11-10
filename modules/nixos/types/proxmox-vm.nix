@@ -1,6 +1,19 @@
-# Example to create a bios compatible gpt partition
-{ lib, ... }:
+{ lib, modulesPath, inputs, ... }:
 {
+  imports = [
+    "${modulesPath}/installer/scan/not-detected.nix"
+    "${modulesPath}/profiles/qemu-guest.nix"
+    "${modulesPath}/profiles/minimal.nix"
+    ../mixins/common/networking.nix
+    ../mixins/common/nix.nix
+    ../mixins/common/users.nix
+
+    inputs.srvos.nixosModules.server
+    inputs.srvos.nixosModules.mixins-systemd-boot
+
+    # ./disk-config.nix
+  ];
+
   disko.devices = {
     disk.disk1 = {
       device = lib.mkDefault "/dev/vda";
@@ -53,4 +66,12 @@
       };
     };
   };
+
+  networking = {
+    useDHCP = true;
+  };
+
+  boot.kernelParams = [ "console=tty0" ];
+
+  services.qemuGuest.enable = true;
 }
