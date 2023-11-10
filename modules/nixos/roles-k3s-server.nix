@@ -137,16 +137,16 @@ in
       };
     };
 
-    networking.firewall.enable = false;
+    networking.firewall.enable = lib.mkForce false;
     networking.firewall.allowedTCPPorts = [ 6443 ];
 
-    system.activationScripts.k3s = ''
-      mkdir -p /var/lib/rancher/k3s/server/manifests
-      ln -sf ${ciliumHelmChart} /var/lib/rancher/k3s/server/manifests/cilium.yaml
-      ln -sf ${ciliumExtra} /var/lib/rancher/k3s/server/manifests/cilium-extra.yaml
-    '';
+    # system.activationScripts.k3s = ''
+    #   mkdir -p /var/lib/rancher/k3s/server/manifests
+    #   ln -sf ${ciliumHelmChart} /var/lib/rancher/k3s/server/manifests/cilium.yaml
+    #   # ln -sf ${ciliumExtra} /var/lib/rancher/k3s/server/manifests/cilium-extra.yaml
+    # '';
 
-    environment.systemPackages = with pkgs; [ stable.k3s kubectl cilium-cli cri-tools hubble ];
+    environment.systemPackages = with pkgs; [ k3s kubectl cilium-cli cri-tools hubble ];
     environment.variables.KUBECONFIG = "/etc/rancher/k3s/k3s.yaml";
   };
 }
