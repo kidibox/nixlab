@@ -1,47 +1,3 @@
-terraform {
-  required_providers {
-    proxmox = {
-      source  = "bpg/proxmox"
-      version = "0.37.0"
-    }
-  }
-}
-
-locals {
-  control_plane_nodes = 2
-}
-
-variable "repo_root" {
-  type = string
-}
-
-variable "proxmox_endpoint" {
-  type = string
-}
-
-variable "proxmox_username" {
-  type      = string
-  sensitive = true
-}
-
-variable "proxmox_password" {
-  type      = string
-  sensitive = true
-}
-
-provider "proxmox" {
-  endpoint = var.proxmox_endpoint
-  username = var.proxmox_username
-  password = var.proxmox_password
-
-  ssh {
-    node {
-      name    = "pve"
-      address = "10.0.10.10"
-    }
-  }
-}
-
 module "installer_iso" {
   source    = "github.com/nix-community/nixos-anywhere//terraform/nix-build"
   attribute = ".#nixosConfigurations.installer.config.formats.install-iso"
@@ -58,10 +14,11 @@ resource "proxmox_virtual_environment_file" "nixos" {
 }
 
 resource "proxmox_virtual_environment_vm" "control_plane" {
-  count     = local.control_plane_nodes
-  name      = "control-plane-${count.index}"
-  node_name = "pve"
-  machine   = "q35"
+  depends_on = [routeros_dhcp_server_lease.static_hosts]
+  count      = var.control_plane_nodes
+  name       = "control-plane-${count.index}"
+  node_name  = "pve"
+  machine    = "q35"
 
   cpu {
     cores = 4
@@ -109,13 +66,14 @@ resource "proxmox_virtual_environment_vm" "control_plane" {
   }
 
   network_device {
-    bridge  = "vmbr0"
-    vlan_id = 100
+    bridge      = "vmbr0"
+    vlan_id     = 100
+    mac_address = macaddress.control_plane[count.index].address
   }
 }
 
 module "deploy" {
-  count  = local.control_plane_nodes
+  count  = var.control_plane_nodes
   source = "github.com/nix-community/nixos-anywhere//terraform/all-in-one"
 
   nixos_system_attr      = ".#nixosConfigurations.${proxmox_virtual_environment_vm.control_plane[count.index].name}.config.system.build.toplevel"
@@ -127,8 +85,20 @@ module "deploy" {
 
 output "control_plane_ips" {
   value = [
-    for host in range(0, local.control_plane_nodes) : [
+    for host in range(0, var.control_plane_nodes) : [
       for ip in flatten(proxmox_virtual_environment_vm.control_plane[host].ipv4_addresses) : ip if ip != "127.0.0.1"
     ]
   ]
+}
+
+resource "macaddress" "control_plane" {
+  count = var.control_plane_nodes
+}
+
+resource "routeros_dhcp_server_lease" "static_hosts" {
+  count = var.control_plane_nodes
+  # comment     = proxmox_virtual_environment_vm.control_plane[count.index].name
+  comment     = "control-plane-${count.index}"
+  mac_address = macaddress.control_plane[count.index].address
+  address     = "10.0.100.${(count.index + 1) * 10}"
 }

@@ -8,6 +8,7 @@ locals {
 inputs = merge(
   local.secrets,
   {
+    routeros_url = "https://10.99.0.1"
   }
 )
 
