@@ -65,6 +65,7 @@ resource "proxmox_virtual_environment_vm" "control_plane" {
 
   cpu {
     cores = 4
+    type  = "x86-64-v2-AES"
   }
 
   memory {
