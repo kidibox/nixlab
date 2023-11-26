@@ -1,0 +1,14 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node main.ts",
+  "projectId": "ee453592-1ebc-481e-9f4f-8cd90cd04d8f",
+  "sendCrashReports": "false",
+  "terraformProviders": ["bpg/proxmox@0.37.0", "carlpett/sops@1.0.0"],
+  "terraformModules": [
+    {
+      "name": "all-in-one",
+      "source": "github.com/nix-community/nixos-anywhere//terraform/all-in-one?ref=1.1.0"
+    }
+  ],
+  "context": {}
+}
