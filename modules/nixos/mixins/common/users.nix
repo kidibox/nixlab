@@ -21,7 +21,7 @@ in
 
   users = {
     mutableUsers = false;
-    defaultUserShell = pkgs.zsh;
+    # defaultUserShell = pkgs.zsh;
 
     users.kid = {
       isNormalUser = true;
