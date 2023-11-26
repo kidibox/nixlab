@@ -5,7 +5,7 @@ resource "routeros_ip_dhcp_client" "wan" {
   use_peer_ntp      = false
 }
 
-resource "routeros_ip_address" "vlan" {
+resource "routeros_ip_address" "vlans" {
   for_each  = local.vlan_cidrs
   interface = routeros_interface_vlan.vlan[each.key].name
   network   = split("/", local.vlan_cidrs[each.key])[0]
@@ -15,7 +15,7 @@ resource "routeros_ip_address" "vlan" {
 resource "routeros_ip_pool" "vlans" {
   for_each = local.vlan_cidrs
   name     = each.key
-  ranges   = ["${cidrhost(each.value, 100)}-${cidrhost(each.value, 200)}"]
+  ranges   = ["${cidrhost(each.value, 100)}-${cidrhost(each.value, 254)}"]
 }
 
 resource "routeros_ip_dhcp_server" "vlans" {
@@ -27,7 +27,7 @@ resource "routeros_ip_dhcp_server" "vlans" {
   address_pool = routeros_ip_pool.vlans[each.key].name
 }
 
-resource "routeros_dhcp_server_network" "vlans" {
+resource "routeros_ip_dhcp_server_network" "vlans" {
   for_each   = local.vlan_cidrs
   address    = each.value
   gateway    = cidrhost(each.value, 1)
@@ -36,13 +36,14 @@ resource "routeros_dhcp_server_network" "vlans" {
 }
 
 resource "routeros_dhcp_server_lease" "static_hosts" {
-  lifecycle {
-    # avoids conflicts when making changes
-    create_before_destroy = false
-  }
+  # lifecycle {
+  #   # avoids conflicts when making changes
+  #   create_before_destroy = false
+  # }
 
   for_each    = { for k, v in local.hosts : k => v }
   comment     = each.key
   address     = each.value.ip
   mac_address = upper(each.value.mac)
+  server      = each.value.dhcp_server
 }
