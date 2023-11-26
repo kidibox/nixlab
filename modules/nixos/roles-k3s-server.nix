@@ -3,16 +3,16 @@ with lib;
 let
   cfg = config.nixlab.k3s;
 
-  kubeletConfig = pkgs.writeTextFile {
-    name = "kubelet.config";
-    text = ''
-      apiVersion: kubelet.config.k8s.io/v1beta1
-      kind: KubeletConfiguration
-
-      shutdownGracePeriod: 30s
-      shutdownGracePeriodCriticalPods: 10s
-    '';
-  };
+  # kubeletConfig = pkgs.writeTextFile {
+  #   name = "kubelet.config";
+  #   text = ''
+  #     apiVersion: kubelet.config.k8s.io/v1beta1
+  #     kind: KubeletConfiguration
+  #
+  #     shutdownGracePeriod: 30s
+  #     shutdownGracePeriodCriticalPods: 10s
+  #   '';
+  # };
 
   # ciliumHelmChart = pkgs.writeTextFile {
   #   name = "cilium.yaml";
@@ -117,25 +117,27 @@ in
       enable = true;
       role = "server";
       extraFlags = toString [
-        "--kubelet-arg=\"config=${kubeletConfig}\""
-        "--container-runtime-endpoint unix:///run/containerd/containerd.sock"
-        "--flannel-backend=none"
-        "--disable-kube-proxy"
+        # "--kubelet-arg=\"config=${kubeletConfig}\""
+        # "--container-runtime-endpoint=unix:///run/containerd/containerd.sock"
+        "--datastore-endpoint=postgres://k3s@pg.kidibox.net:5432/k3s"
+        "--token=foo"
+        # "--flannel-backend=none"
+        # "--disable-kube-proxy"
         "--disable-network-policy"
         "--disable servicelb,traefik"
       ];
     };
 
     # TODO: remove this part, zfs snapshotter is included in k3s's containerd now
-    virtualisation.containerd = {
-      enable = true;
-      settings = {
-        plugins."io.containerd.grpc.v1.cri".cni = {
-          bin_dir = "/var/lib/rancher/k3s/agent/opt/cni/bin";
-          conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d";
-        };
-      };
-    };
+    # virtualisation.containerd = {
+    #   enable = true;
+    #   settings = {
+    #     plugins."io.containerd.grpc.v1.cri".cni = {
+    #       bin_dir = "/var/lib/rancher/k3s/agent/opt/cni/bin";
+    #       conf_dir = "/var/lib/rancher/k3s/agent/etc/cni/net.d";
+    #     };
+    #   };
+    # };
 
     networking.firewall.enable = lib.mkForce false;
     networking.firewall.allowedTCPPorts = [ 6443 ];

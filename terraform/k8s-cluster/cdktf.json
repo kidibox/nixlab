@@ -1,0 +1,31 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node main.ts",
+  "projectId": "266ff1db-9260-4c91-a9ed-fe4ee60aba73",
+  "sendCrashReports": "false",
+  "terraformProviders": [
+    "bpg/proxmox@0.37.0",
+    "carlpett/sops@1.0.0",
+    "ivoronin/macaddress@0.3.2",
+    "terraform-routeros/routeros@1.25.0"
+  ],
+  "terraformModules": [
+    {
+      "name": "nix-build",
+      "source": "github.com/nix-community/nixos-anywhere//terraform/nix-build?ref=1.1.0"
+    },
+    {
+      "name": "install",
+      "source": "github.com/nix-community/nixos-anywhere//terraform/install?ref=1.1.0"
+    },
+    {
+      "name": "all-in-one",
+      "source": "github.com/nix-community/nixos-anywhere//terraform/all-in-one?ref=1.1.0"
+    },
+    {
+      "name": "ros_static_host",
+      "source": "../modules/ros_static_host"
+    }
+  ],
+  "context": {}
+}

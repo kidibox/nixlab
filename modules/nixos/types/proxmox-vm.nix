@@ -4,14 +4,13 @@
     "${modulesPath}/installer/scan/not-detected.nix"
     "${modulesPath}/profiles/qemu-guest.nix"
     "${modulesPath}/profiles/minimal.nix"
-    ../mixins/common/networking.nix
-    ../mixins/common/nix.nix
-    ../mixins/common/users.nix
 
     inputs.srvos.nixosModules.server
     inputs.srvos.nixosModules.mixins-systemd-boot
 
-    # ./disk-config.nix
+    ../mixins/common/networking.nix
+    ../mixins/common/nix.nix
+    ../mixins/common/users.nix
   ];
 
   disko.devices = {
@@ -67,11 +66,7 @@
     };
   };
 
-  networking = {
-    useDHCP = true;
-  };
-
-  boot.kernelParams = [ "console=tty0" ];
-
   services.qemuGuest.enable = true;
+
+  # boot.kernelParams = [ "console=tty0" ];
 }

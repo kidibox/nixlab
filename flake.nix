@@ -59,7 +59,7 @@
 
   outputs = inputs@{ self, flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      # debug = true;
+      debug = true;
 
       imports = [
         inputs.flake-parts.flakeModules.easyOverlay

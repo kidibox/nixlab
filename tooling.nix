@@ -8,6 +8,7 @@
         terragrunt
         terraform
         terraform-ls
+        nodePackages.cdktf-cli
         deploy-rs
         sops
         age
@@ -15,6 +16,7 @@
         cilium-cli
         hubble
         fluxcd
+        postgresql
       ];
     };
 
