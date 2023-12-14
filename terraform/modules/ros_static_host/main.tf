@@ -2,7 +2,7 @@ terraform {
   required_providers {
     routeros = {
       source  = "terraform-routeros/routeros"
-      version = "1.25.0"
+      version = "1.27.0"
     }
   }
 }
@@ -26,8 +26,8 @@ variable "dhcp_server" {
 }
 
 resource "routeros_ip_dhcp_server_lease" "static_hosts" {
+  mac_address = upper(var.mac_address)
   address     = var.ip_address
-  mac_address = var.mac_address
   server      = var.dhcp_server
 }
 

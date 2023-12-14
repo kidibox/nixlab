@@ -2,11 +2,20 @@ import { Construct } from "constructs";
 import { Macaddress } from "../.gen/providers/macaddress/macaddress";
 import { VirtualEnvironmentVm } from "../.gen/providers/proxmox/virtual-environment-vm";
 import { AllInOne } from "../.gen/modules/all-in-one";
-import { TerraformMetaArguments } from "cdktf";
-import { RosStaticHost } from "../.gen/modules/ros_static_host";
+import { DataTerraformRemoteState, Fn, TerraformMetaArguments } from "cdktf";
+import { IpDhcpServerLease } from "../.gen/providers/routeros/ip-dhcp-server-lease";
+import { IpDnsRecord } from "../.gen/providers/routeros/ip-dns-record";
+
+const vlanDhcpServer: { [index: number]: string } = {
+  99: "adm",
+  10: "srv",
+  30: "media",
+  100: "lan",
+};
 
 export interface NixosVmConfig extends TerraformMetaArguments {
-  isoFileId: string;
+  nodeName: string;
+  vlanId?: number;
   ip: string;
   tags?: string[];
   dnsName?: string;
@@ -15,27 +24,49 @@ export class NixosVm extends Construct {
   vm: VirtualEnvironmentVm;
   deploy: AllInOne;
   mac: Macaddress;
-  staticHost: RosStaticHost;
+  lease: IpDhcpServerLease;
+  record?: IpDnsRecord;
 
-  constructor(scope: Construct, name: string, config: NixosVmConfig) {
+  constructor(
+    scope: Construct,
+    name: string,
+    remoteNixIso: DataTerraformRemoteState,
+    config: NixosVmConfig,
+  ) {
     super(scope, name);
+
+    const vlanId = config.vlanId ?? 100;
 
     this.mac = new Macaddress(this, "mac", {
       // Proxmox official prefix
       prefix: [0xbc, 0x24, 0x11],
     });
 
-    this.staticHost = new RosStaticHost(this, "staticHost", {
-      ipAddress: config.ip,
-      macAddress: this.mac.address,
-      dnsName: config.dnsName,
+    this.lease = new IpDhcpServerLease(this, "lease", {
+      macAddress: Fn.upper(this.mac.address),
+      address: config.ip,
+      server: vlanDhcpServer[vlanId],
     });
 
+    if (config.dnsName) {
+      this.record = new IpDnsRecord(this, "record", {
+        type: "A",
+        name: config.dnsName,
+        address: config.ip,
+      });
+    }
+
+    // this.staticHost = new RosStaticHost(this, "staticHost", {
+    //   ipAddress: config.ip,
+    //   macAddress: this.mac.address,
+    //   dnsName: config.dnsName,
+    // });
+
     this.vm = new VirtualEnvironmentVm(this, "vm", {
-      dependsOn: [this.staticHost],
+      dependsOn: [this.lease],
       tags: ["terraform", "nixos"].concat(config.tags || []),
       name: name,
-      nodeName: "pve",
+      nodeName: config.nodeName,
       machine: "q35",
       bios: "ovmf",
       bootOrder: ["virtio0", "ide0"],
@@ -67,12 +98,12 @@ export class NixosVm extends Construct {
       cdrom: {
         enabled: true,
         interface: "ide0",
-        fileId: config.isoFileId,
+        fileId: Fn.lookup(remoteNixIso.get("isoFileIds"), config.nodeName),
       },
       networkDevice: [
         {
           bridge: "vmbr0",
-          vlanId: 100,
+          vlanId,
           macAddress: this.mac.address,
         },
       ],
@@ -83,7 +114,7 @@ export class NixosVm extends Construct {
       nixosSystemAttr: `.#nixosConfigurations.${name}.config.system.build.toplevel`,
       nixosPartitionerAttr: `.#nixosConfigurations.${name}.config.system.build.diskoScript`,
 
-      targetHost: this.staticHost.ipAddress,
+      targetHost: this.lease.address,
       // instanceId: Fn.element(this.vm.ipv4Addresses.get(1), 0),
     });
   }

@@ -26,49 +26,43 @@ locals {
   }
   wan_port = "ether8"
   ports = {
-    # sfp-sfpplus1 = {
-    #   pvid = local.vlans.srv.id
-    # }
-    ether1 = {
-      comment = "hypernix"
+    sfp-sfpplus1 = {
+      comment = "pve0"
       tagged = [
         local.vlans.srv.id,
-        # local.vlans.media.id,
-        # local.vlans.svc.id,
-        # local.vlans.iot.id,
-        # local.vlans.ioc.id,
+        local.vlans.media.id,
         local.vlans.lan.id,
+        local.vlans.adm.id,
       ]
       frame_types = "admit-only-vlan-tagged"
-      # frame_types = "admit-all"
     }
-    ether2 = {
-      comment = "pve"
-      pvid    = local.vlans.srv.id
+    ether1 = {
+      comment = "pve1"
       tagged = [
-        local.vlans.adm.id,
-        # local.vlans.srv.id,
+        local.vlans.srv.id,
         local.vlans.media.id,
-        # local.vlans.svc.id,
-        # local.vlans.iot.id,
-        # local.vlans.ioc.id,
         local.vlans.lan.id,
         local.vlans.adm.id,
+      ]
+      frame_types = "admit-only-vlan-tagged"
+    }
+    ether2 = {
+      comment = "pve0-ipmi"
+      pvid    = local.vlans.adm.id
+      tagged = [
+        # local.vlans.srv.id,
+        # local.vlans.media.id,
+        # local.vlans.lan.id,
+        # local.vlans.adm.id,
       ]
       # frame_types = "admit-only-vlan-tagged"
       frame_types = "admit-all"
     }
-    # ether2 = {
-    #   comment = "pve-ipmi"
-    #   pvid    = local.vlans.adm.id
-    # }
     ether3 = {
       comment = "capxr0"
       tagged = [
         local.vlans.adm.id,
         local.vlans.lan.id,
-        # local.vlans.iot.id,
-        # local.vlans.ioc.id,
       ]
       frame_types = "admit-only-vlan-tagged"
     }
@@ -77,37 +71,22 @@ locals {
       tagged = [
         local.vlans.adm.id,
         local.vlans.lan.id,
-        # local.vlans.iot.id,
-        # local.vlans.ioc.id,
       ]
       frame_types = "admit-only-vlan-tagged"
     }
     ether5 = {
       comment = "kid-pc"
-      pvid    = local.vlans.adm.id
+      pvid    = local.vlans.lan.id
     }
-    # ether6 = {
-    #   comment = "cc-pc"
-    #   pvid    = local.vlans.lan.id
-    # }
     ether6 = {
       comment = "sw-office"
-      # pvid    = local.vlans.adm.id
       tagged = [
         local.vlans.adm.id,
-        # local.vlans.srv.id,
-        # local.vlans.media.id,
         local.vlans.lan.id,
         local.vlans.iot.id,
-        # local.vlans.ioc.id,
       ]
       frame_types = "admit-only-vlan-tagged"
-      # frame_types = "admit-all"
     }
-    # ether7 = {
-    #   comment = "doorbell"
-    #   pvid    = local.vlans.iot.id
-    # }
   }
   hosts = {
     capxr0 = {
@@ -214,8 +193,21 @@ resource "routeros_ip_dns" "upstream" {
 #   name     = "${each.key}.${local.tld}"
 # }
 #
-# resource "routeros_routing_bgp_connection" "hypernix_k3s" {
-#   name = "toHypernix"
+resource "routeros_routing_bgp_connection" "control_plane_0" {
+  name = "control-plane-0"
+  as   = 64512
+
+  local {
+    role = "ebgp"
+  }
+
+  remote {
+    address = "10.0.100.180"
+  }
+}
+
+# resource "routeros_routing_bgp_connection" "control_plane_0" {
+#   name = "control-plane-1"
 #   as   = 64512
 #
 #   local {
@@ -223,6 +215,6 @@ resource "routeros_ip_dns" "upstream" {
 #   }
 #
 #   remote {
-#     address = local.hosts.hypernix.ip
+#     address = "10.0.100.181"
 #   }
 # }

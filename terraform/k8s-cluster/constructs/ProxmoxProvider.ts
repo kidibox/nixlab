@@ -17,9 +17,15 @@ export class ProxmoxProvider extends Construct {
     });
 
     this.proxmoxProvider = new proxmox.ProxmoxProvider(this, "proxmox", {
-      endpoint: "https://pve.servers.home.kidibox.net:8006",
+      endpoint: "https://pve0.kidibox.net:8006",
       username: this.secrets.data.lookup("proxmox_username"),
       password: this.secrets.data.lookup("proxmox_password"),
+      ssh: {
+        nodeAttribute: [
+          { name: "pve0", address: "10.0.10.10" },
+          { name: "pve1", address: "10.0.10.11" },
+        ],
+      },
     });
   }
 }

@@ -20,7 +20,7 @@ spec:
         name: cilium
       interval: 12h
   values:
-    k8sServiceHost: 10.0.100.10
+    k8sServiceHost: 10.0.100.189
     k8sServicePort: 6443
     kubeProxyReplacement: true
 

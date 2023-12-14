@@ -5,4 +5,5 @@
   ];
 
   nixlab.k3s.enable = true;
+  nixlab.k3s.bootstrap = true;
 }

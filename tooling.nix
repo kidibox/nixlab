@@ -1,5 +1,5 @@
 {
-  perSystem = { config, pkgs, ... }: {
+  perSystem = { config, pkgs, inputs', ... }: {
     devshells.default = {
       packages = with pkgs; [
         nil
@@ -17,6 +17,7 @@
         hubble
         fluxcd
         postgresql
+        inputs'.dagger.packages.dagger
       ];
     };
 

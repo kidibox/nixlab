@@ -4,10 +4,11 @@
   "projectId": "266ff1db-9260-4c91-a9ed-fe4ee60aba73",
   "sendCrashReports": "false",
   "terraformProviders": [
-    "bpg/proxmox@0.37.0",
+    "bpg/proxmox@0.40.0",
     "carlpett/sops@1.0.0",
     "ivoronin/macaddress@0.3.2",
-    "terraform-routeros/routeros@1.25.0"
+    "tenstad/remote@0.1.2",
+    "terraform-routeros/routeros@~> 1.27"
   ],
   "terraformModules": [
     {

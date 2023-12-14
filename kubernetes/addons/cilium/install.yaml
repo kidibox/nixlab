@@ -10,7 +10,7 @@ spec:
   version: 1.14.3
   targetNamespace: kube-system
   valuesContent: |-
-    k8sServiceHost: 10.0.100.10
+    k8sServiceHost: 10.0.100.189
     k8sServicePort: 6443
     kubeProxyReplacement: true
 
@@ -40,9 +40,9 @@ spec:
           - 10.42.0.0/16
 
 
-    ingressController:
-      enabled: true
-      loadbalancerMode: dedicated
+    # ingressController:
+    #   enabled: true
+    #   loadbalancerMode: dedicated
     gatewayAPI:
       enabled: false
 

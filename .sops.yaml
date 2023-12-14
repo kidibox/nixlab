@@ -1,6 +1,7 @@
 keys:
   - &kid-nixos age1dghfu7sxwlkf4626eywmgr63y2g7m4x8zs8a6xt2zay3x7dclpnsw776dd
-  - &hypernix age1rtvuvel2qhaa00uszwps8pq5vkf2sl9x4696vur5ntle90rclcqq3zvd08
+  - &cloudflared0 age1e0jew284mj32vktlftts45plgw8eu08h4ktw7m6rc4sht2gkj46qz2drx4
+  - &cloudflared1 age1wl8q2yyp8evg8pnavumn8flvndxs954vayvtmqjw4kcxp5asr92sk45400
 
 defaults: &defaults
   key_groups:
@@ -8,11 +9,12 @@ defaults: &defaults
         - *kid-nixos
 
 creation_rules:
-  - path_regex: hosts/hypernix/[^/]+\.sops\.yaml$
+  - path_regex: hosts/cloudflared.sops.yaml
     key_groups:
       - age:
           - *kid-nixos
-          - *hypernix
+          - *cloudflared0
+          - *cloudflared1
 
   - path_regex: kubernetes/.*\.sops\.ya?ml
     encrypted_regex: ^(data|stringData)$

@@ -46,13 +46,13 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    deploy-rs = {
-      url = "github:serokell/deploy-rs";
+    sops-nix = {
+      url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    sops-nix = {
-      url = "github:Mic92/sops-nix";
+    dagger = {
+      url = "github:dagger/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
@@ -91,22 +91,9 @@
             inherit system;
             config.allowUnfree = true;
           };
-
         };
 
       flake = {
-        deploy.nodes = {
-          hypernix = {
-            hostname = "10.0.10.20";
-            profiles.system = {
-              user = "root";
-              sshUser = "kid";
-              remoteBuild = true;
-              path = inputs.deploy-rs.lib.x86_64-linux.activate.nixos self.nixosConfigurations.hypernix;
-            };
-          };
-        };
-
         checks = builtins.mapAttrs (_system: deployLib: deployLib.deployChecks self.deploy) inputs.deploy-rs.lib;
       };
     };

@@ -1,12 +1,12 @@
 import { Construct } from "constructs";
-import { TerraformStack, TerraformOutput, Fn } from "cdktf";
+import { TerraformStack, Fn, TerraformOutput } from "cdktf";
 import { NixBuild } from "../../.gen/modules/nix-build";
 import { VirtualEnvironmentFile } from "../../.gen/providers/proxmox/virtual-environment-file";
 import { ProxmoxProvider } from "../../constructs";
 import { SopsProvider } from "../../.gen/providers/sops/provider";
 
 export class IsoStack extends TerraformStack {
-  isoFile: VirtualEnvironmentFile;
+  isoFileIds: TerraformOutput;
 
   constructor(scope: Construct, id: string) {
     super(scope, id);
@@ -18,21 +18,34 @@ export class IsoStack extends TerraformStack {
       attribute: ".#nixosConfigurations.installer.config.formats.install-iso",
     });
 
-    this.isoFile = new VirtualEnvironmentFile(this, "isoFile", {
-      datastoreId: "local",
-      contentType: "iso",
-      nodeName: "pve",
-      sourceFile: {
-        path: Fn.lookup(iso.resultOutput, "out"),
-      },
-    });
+    const isoFiles = [
+      new VirtualEnvironmentFile(this, "pve0", {
+        datastoreId: "local",
+        contentType: "iso",
+        nodeName: "pve0",
+        sourceFile: {
+          path: Fn.lookup(iso.resultOutput, "out"),
+        },
+      }),
+      new VirtualEnvironmentFile(this, "pve1", {
+        datastoreId: "local",
+        contentType: "iso",
+        nodeName: "pve1",
+        sourceFile: {
+          path: Fn.lookup(iso.resultOutput, "out"),
+        },
+      }),
+    ];
 
-    new TerraformOutput(this, "isoOutput", {
-      value: Fn.lookup(iso.resultOutput, "out"),
-    });
+    // new TerraformOutput(this, "isoOutput", {
+    //   value: Fn.lookup(iso.resultOutput, "out"),
+    // });
 
-    new TerraformOutput(this, "isoFileId", {
-      value: this.isoFile.id,
+    this.isoFileIds = new TerraformOutput(this, "isoFileIds", {
+      value: isoFiles.reduce(
+        (value, f) => ({ ...value, [f.nodeName]: f.id }),
+        {},
+      ),
     });
   }
 }
