@@ -14,7 +14,7 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           cachix_token: ${{ secrets.CACHIX_TOKEN }}
-      - uses: DeterminateSystems/update-flake-lock@v20
+      - uses: DeterminateSystems/update-flake-lock@v21
         with:
           # Custom token with `repo` access
           token: ${{ secrets.GH_TOKEN }}
