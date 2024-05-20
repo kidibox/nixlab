@@ -18,7 +18,7 @@ runs:
         # To avoid GitHub rate limiting
         extra_nix_config:
           access-tokens = github.com=${{ inputs.github_token }}
-    - uses: cachix/cachix-action@v12
+    - uses: cachix/cachix-action@v15
       with:
         name: kidibox
         extrapullNames: nix-community,devenv,numtide
