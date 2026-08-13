@@ -13,7 +13,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: cachix/install-nix-action@6a9a9e84a173d90b3ffb42c5ddaf9ea033fad011 # v23
+    - uses: cachix/install-nix-action@13d8dd58da0234aa297dedd986986ccb8e7f3e24 # v31
       with:
         # To avoid GitHub rate limiting
         extra_nix_config:
